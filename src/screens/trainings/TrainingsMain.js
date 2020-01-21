@@ -1,27 +1,44 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default class TrainingsMain extends React.Component {
+import LandingScreen from './LandingScreen'
+import TrainingCreationScreen from './TrainingCreationScreen'
+import CourseCreationScreen from './../CourseCreationScreen'
+import CourseCreationBasketScreen from './../CourseCreationBasketScreen'
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>Alusta treeningut!</Text>
-            </View>
-        );
-    }
-}
+const TrainingsStack = createStackNavigator(
+	{
+		Landing: {
+			screen: LandingScreen,
+			navigationOptions: {
+				title: 'Treeningud'
+			}
+		},
+		TrainingCreation: {
+			screen: TrainingCreationScreen,
+			navigationOptions: {
+				title: 'Treeningu andmed'
+			}
+		},
+		CourseCreation: {
+			screen: CourseCreationScreen,
+			navigationOptions: {
+				title: 'Lisa rada'
+			}
+		},
+		CourseCreationBasket: {
+			screen: CourseCreationBasketScreen,
+			navigationOptions: {
+				title: 'Korvide andmed'
+			}
+		},
+	},
+	{
+		initialRouteName: 'Landing',
+	}
+);
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    button: {
-        marginTop: 8,
-        padding: 8,
-        backgroundColor: '#4293f5',
-        borderRadius: 8
-    }
-  })
+const TrainingsMain = createAppContainer(TrainingsStack);
+
+export default TrainingsMain

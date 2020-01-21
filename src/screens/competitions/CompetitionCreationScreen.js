@@ -13,6 +13,7 @@ export default class CompetitionCreationSreen extends React.Component {
 			course: null,
             description: null,
             access: 'public',
+            divisions: [],
         };
     }
 
@@ -21,7 +22,7 @@ export default class CompetitionCreationSreen extends React.Component {
         const radio_props = [
             {label: 'Avalik', value: 'public' },
             {label: 'Privaatne', value: 'private' }
-          ];
+        ];
            
         return (
             <View style={styles.container}>
@@ -64,8 +65,14 @@ export default class CompetitionCreationSreen extends React.Component {
                 <RadioForm
                     radio_props={radio_props}
                     initial={0}
-                    buttonColor={'#2196f3'}
+                    buttonColor={'#000'}
+                    buttonOuterColor={'#000'}
+                    selectedButtonColor={'#000'}
                     onPress={(value) => {this.setState({access: value})}}
+                    borderWidth={1}
+                    buttonInnerColor={'#000'}
+                    buttonSize={15}
+                    style = {{marginTop: 20}}
                 />
                 <TouchableOpacity 
                     style = {styles.button}
@@ -92,7 +99,7 @@ const styles = StyleSheet.create({
         marginTop: 8
     },
     button: {
-        marginTop: 8,
+        marginTop: 15,
         padding: 8,
         backgroundColor: '#4293f5',
         borderRadius: 8

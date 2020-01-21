@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 
@@ -9,7 +9,9 @@ export default class CoursesMain extends React.Component {
         super(props);
         this.state = {
             iconColor: '#878787',
-            courseLocationsJSON: null
+            APICourseLocationsJSON: null,
+            sortedCourseLocations: [],
+            APIdataReady: false
         };
 	}
 
@@ -24,12 +26,13 @@ export default class CoursesMain extends React.Component {
     }
 
     async getCourseLocationsFromAPI() {
+        console.log('API NETIST')
         try {
             let response = await fetch(
-            'https://discgolfmetrix.com/api.php?content=courses_list&country_code=EE&name=a%',
+            'https://discgolfmetrix.com/api.php?content=courses_list&country_code=EE',
             );
             let responseJson = await response.json();
-            this.setState({courseLocationsJSON: responseJson})
+            this.setState({APICourseLocationsJSON: responseJson})
             // console.log(this.state.courseLocationsJSON)
             this.sortJsonData()
         } catch (error) {
@@ -38,48 +41,81 @@ export default class CoursesMain extends React.Component {
     }
 
     sortJsonData = () => {
-        const unsortedJson = this.state.courseLocationsJSON
+        const unsortedJson = this.state.APICourseLocationsJSON
         const unsortedJsonCourses = unsortedJson.courses
-        let sortedJson = {}
         console.log(Object.keys(unsortedJsonCourses).length)
 
-        for (var key of unsortedJsonCourses) {
-            // console.log(key)
-            if(key.X !== "" && key.Y !== "") {
+        for (let key of unsortedJsonCourses) {
+            if(key.X !== "" && key.Y !== "" && key.Enddate === null) {
+                key.X = parseFloat(key.X)
+                key.Y = parseFloat(key.Y)
+                key.Fullname = key.Fullname.replace(' &rarr;', ':')
+                const description = key.City === '' || key.Area === '' ? 'Asukoht: ' + key.City + key.Area : 'Asukoht: ' + key.City + ', ' + key.Area;
                 let obj = {
+                    id: key.ID,
                     name: key.Fullname,
                     area: key.Area,
                     city: key.City,
-                    latitude: key.X,
-                    longitude: key.Y,
+                    coordinates: {
+                        latitude: key.X,
+                        longitude: key.Y,
+                    },
+                    description: description
                 }
-                // sortedJson.assign(obj)
+                this.setState({
+                    sortedCourseLocations: [...this.state.sortedCourseLocations, obj]
+                })
             }
         }
+        console.log(this.state.sortedCourseLocations.length)
+        this.setState({APIdataReady: true})
     }
 
     render() {
-        return (
-            <View style={styles.container}>
-                <Text>Erinevad rajad kaardi peal</Text>
-                <MapView style={styles.map}
-                    initialRegion={{
-                    latitude: 58.388540,
-                    longitude: 24.499905,
-                    latitudeDelta: 4,
-                    longitudeDelta: 1,
-                    }}
-                    
-                >
-                    <Marker
-                        coordinate={{latitude: 58.388540, longitude: 24.499905}}
-                        title={'title'}
-                        description={'description'}
-                        image={require('../../assets/discbasket.png')}
-                    />
-                </MapView>
-            </View>
-        );
+        if (!this.state.APIdataReady) {
+            return (
+                <View style={styles.container}>
+                    <Text>Erinevad rajad kaardi peal</Text>
+                    <MapView style={styles.map}
+                        initialRegion={{
+                        latitude: 58.388540,
+                        longitude: 24.499905,
+                        latitudeDelta: 4,
+                        longitudeDelta: 1,
+                        }}
+                        
+                    >
+                    </MapView>
+                    <ActivityIndicator size="large" />
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Text>Erinevad rajad kaardi peal</Text>
+                    <MapView style={styles.map}
+                        initialRegion={{
+                        latitude: 58.388540,
+                        longitude: 24.499905,
+                        latitudeDelta: 4,
+                        longitudeDelta: 1,
+                        }}
+                        
+                    >
+                        {this.state.sortedCourseLocations.map((marker, index) => (
+                            <Marker
+                                key = {index}
+                                tracksViewChanges={false}
+                                coordinate={marker.coordinates}
+                                title={marker.name}
+                                description={marker.description}
+                                image={require('../../assets/discbasket.png')}
+                            />
+                        ))}
+                    </MapView>
+                </View>
+            );
+        }
     }
 }
 
