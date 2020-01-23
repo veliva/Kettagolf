@@ -16,11 +16,29 @@ export default class CourseCreationBasketSreen extends React.Component {
             numberOfBaskets: null,
             location: null,
             county: null,
+            country: null,
             pickerItems: [],
             visible: false,
             snackText: '',
             snackDuration: 3000
         };
+    }
+
+    async componentDidMount() {
+        let courseBaskets = this.props.navigation.state.params.pickerItems
+        courseBaskets = courseBaskets.slice(0, this.props.navigation.state.params.numberOfBaskets)
+        await this.setState({
+            course: this.props.navigation.state.params.course,
+            numberOfBaskets: this.props.navigation.state.params.numberOfBaskets,
+            location: this.props.navigation.state.params.location,
+            county: this.props.navigation.state.params.county,
+            country: this.props.navigation.state.params.country,
+            pickerItems: courseBaskets,
+        })
+
+        console.log(this.state.location)
+        console.log(this.state.county)
+        console.log(this.state.country)
     }
 
     focusNextField(id) {
@@ -33,7 +51,6 @@ export default class CourseCreationBasketSreen extends React.Component {
     }
 
     checkInputs = () => {
-
         for(let i=0; i < this.state.numberOfBaskets-1; i++) {
             if(this.state.pickerItems[i].par === null || this.state.pickerItems[i].par === '') {
                 const text = 'Raja ' + String(i+1) + ' par sisestamata!'
@@ -44,23 +61,29 @@ export default class CourseCreationBasketSreen extends React.Component {
                 return
             }
         }
-
-        Alert.alert('kõik ilusti tehtud')
+        
+        let pickerItemsWithoutValue = JSON.parse(JSON.stringify(this.state.pickerItems))
+        for(let i=0; i < this.state.numberOfBaskets; i++) {
+            delete pickerItemsWithoutValue[i].value
+        }
+        this.addCourseToFirestore(pickerItemsWithoutValue)
     }
 
-    async componentDidMount() {
-        let courseBaskets = this.props.navigation.state.params.pickerItems
-        courseBaskets = courseBaskets.slice(0, this.props.navigation.state.params.numberOfBaskets)
-        await this.setState({
-            course: this.props.navigation.state.params.course,
-            numberOfBaskets: this.props.navigation.state.params.numberOfBaskets,
-            location: this.props.navigation.state.params.location,
-            county: this.props.navigation.state.params.county,
-            pickerItems: courseBaskets,
+    addCourseToFirestore = (pickerItemsWithoutValue) => {
+        firestore().collection('courses').add({
+            name: this.state.course,
+            numberOfBaskets: this.state.numberOfBaskets,
+            location: this.state.location,
+            county: this.state.county,
+            country: this.state.country,
+            tracks: pickerItemsWithoutValue,
         })
-
-        console.log(this.state.location)
-        console.log(this.state.county)
+        .then(function() {
+            console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
     }
 
     renderHeader = () => {

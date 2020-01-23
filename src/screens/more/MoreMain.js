@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default class MoreMain extends React.Component {
+import LandingScreen from './LandingScreen'
+import AboutScreen from './AboutScreen'
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>Info ja muu</Text>
-            </View>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+const MoreStack = createStackNavigator(
+    {
+        Landing: {
+            screen: LandingScreen,
+            navigationOptions: {
+                title: 'Muu'
+            }
+        },
+        About: {
+            screen: AboutScreen,
+            navigationOptions: {
+                title: 'Rakenduse info'
+            }
+        }
     },
-    button: {
-        marginTop: 8,
-        padding: 8,
-        backgroundColor: '#4293f5',
-        borderRadius: 8
+    {
+        initialRouteName: 'Landing',
     }
-  })
+);
+
+const MoreMain = createAppContainer(MoreStack);
+
+export default MoreMain

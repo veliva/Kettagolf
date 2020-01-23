@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Modal, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Modal, ScrollView, TouchableOpacity } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { Input, Button } from 'react-native-elements';
@@ -77,6 +77,7 @@ export default class CourseCreationSreen extends React.Component {
             numberOfBaskets: this.state.numberOfBaskets,
             location: this.state.location,
             county: this.state.county,
+            country: this.state.country,
             pickerItems: this.state.pickerItems,
         })
     }
@@ -103,7 +104,6 @@ export default class CourseCreationSreen extends React.Component {
                         items={countriesJson}
                         onTextChange
                         onItemSelect={(value) => {
-                            console.log('valitud')
                             this.setState({country: value.name})
                             this.toggleModalVisibility(false)
                         }}
@@ -196,7 +196,7 @@ export default class CourseCreationSreen extends React.Component {
                     inputContainerStyle={styles.inputContainerStyle}
                     containerStyle={{marginTop: 20}}
                 />
-
+                <TouchableOpacity onPress = { () => { this.toggleModalVisibility(true) }}>
                 <Input
                     label='Riik:'
                     placeholder='Riik'
@@ -209,21 +209,7 @@ export default class CourseCreationSreen extends React.Component {
                     inputContainerStyle={styles.inputContainerStyle}
                     containerStyle={{marginTop: 20}}
                 />
-                
-                <Button
-                    icon={
-                        <MaterialIcon
-                        name="language"
-                        size={15}
-                        color="white"
-                        style = {{paddingRight: 10}}
-                        />
-                    }
-                    buttonStyle={styles.button}
-                    containerStyle={{width: '100%', alignItems: 'center', marginTop: 50}}
-                    title="Vali riik"
-                    onPress = { () => { this.toggleModalVisibility(true) }}
-                />
+                </TouchableOpacity>
 
                 <Button
                     icon={

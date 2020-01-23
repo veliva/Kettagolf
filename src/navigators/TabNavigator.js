@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Image } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createAppContainer } from 'react-navigation'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

@@ -12,10 +12,9 @@ export default class TrainingCreationSreen extends React.Component {
     }
 
     getCourseDataFromFirestore = () => {
-		firestore().collection('courses').doc(this.state.course).get()
+		firestore().collection('courses').where("name", "==", this.state.course).get()
 		.then(snapshot => {
-            console.log(snapshot._data)
-            if(snapshot._data === undefined) {
+            if(snapshot._docs.length === 0) {
                 Alert.alert(
                     'Tundmatu rada',
                     'Sellise nimega rada pole andmebaasis. Kas soovid selle lisada?',
@@ -28,16 +27,10 @@ export default class TrainingCreationSreen extends React.Component {
                     ],
                     {cancelable: false},
                 );
+            } else {
+                console.log(snapshot._docs[0].id)
+                this.props.navigation.navigate('PlayerAdd', {course: this.state.course})
             }
-			// const data = snapshot._data
-			// const nameFromDB = data.firstName + ' ' + data.lastName
-			// this.setState({
-			// 	name: nameFromDB,
-			// 	gender: data.gender,
-			// 	country: data.country,
-			// 	rating: data.rating,
-			// 	pdgaNumber: data.pdgaNumber
-			// })
 		})
 		.catch(err => {
 			console.log('Error getting documents', err);
