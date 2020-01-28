@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert, ScrollView, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Alert, FlatList } from 'react-native';
 import { Input, Button, Avatar } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -14,7 +14,9 @@ export default class TrainingCreationSreen extends React.Component {
             course: null,
             itselfAdded: true,
             players: [],
-            player: null
+            player: null,
+            playerName: null,
+            itselfUID: null
         };
     }
 
@@ -23,22 +25,22 @@ export default class TrainingCreationSreen extends React.Component {
             course: this.props.navigation.state.params.course,
         })
         console.log('______________')
-        this.addItself()
+
+        const { currentUser } = firebase.auth()
+        this.setState({itselfUID: currentUser.uid})
+        this.addPlayer(currentUser.uid)
     }
 
-    async removeItself() {
-        const { currentUser } = firebase.auth()
-
+    async removePlayer(userID) {
         await this.setState(prevState => ({
-            players: prevState.players.filter(element => element.uid !== currentUser.uid)
+            players: prevState.players.filter(element => element.uid !== userID)
         }));
         console.log(this.state.players)
     }
 
-    async addItself() {
-        const { currentUser } = firebase.auth()
-        await this.userDataFromFirestore(currentUser.uid)
-        await this.imageFromFirebaseStorage(currentUser.uid)
+    async addPlayer(userID) {
+        await this.userDataFromFirestore(userID)
+        await this.imageFromFirebaseStorage(userID)
 
         await this.setState({
             players: [...this.state.players, this.state.player],
@@ -84,6 +86,37 @@ export default class TrainingCreationSreen extends React.Component {
 			console.log('Error getting documents', err);
 		});
     }
+
+    searchUserByName = () => {
+        firestore().collection('users').where("fullName", "==", this.state.playerName).get()
+		.then(snapshot => {
+            if(snapshot._docs.length === 0) {
+                Alert.alert(
+                    'Tundmatu nimi',
+                    'Sellise nimega mängijat pole andmebaasis.',
+                    [
+                      {text: '', },
+                      {
+                        text: '',
+                      },
+                      {text: 'OK', },
+                    ],
+                    {cancelable: false},
+                );
+            } else {
+                // console.log(snapshot._docs[0].id)
+                // console.log(snapshot._docs[0]._data)
+                this.addPlayer(snapshot._docs[0].id)
+                this.setState({playerName: null})
+                if(snapshot._docs[0].id === this.state.itselfUID) {
+                    this.setState({itselfAdded: true})
+                }
+            }
+		})
+		.catch(err => {
+			console.log('Error getting documents', err);
+		});
+    }
     
     renderItem = ({item, index}) => {
         // console.log(JSON.stringify(item))
@@ -121,7 +154,7 @@ export default class TrainingCreationSreen extends React.Component {
                               {
                                 text: '',
                               },
-                              {text: 'Jah', onPress: () => console.log('Jah vajutatud')},
+                              {text: 'Jah', onPress: () => this.removePlayer(item.uid)},
                             ],
                             {cancelable: false},
                         );
@@ -135,63 +168,91 @@ export default class TrainingCreationSreen extends React.Component {
     render() {
         return(
             <View style={styles.container}>
-                {/* <ScrollView contentContainerStyle={{flex: 1}}> */}
 
-                    <View style={styles.courseContainer}>
-                        <Text style={styles.courseText}>Rada: {this.state.course}</Text>
-                    </View>
+                <View style={styles.courseContainer}>
+                    <Text style={styles.courseText}>Rada: {this.state.course}</Text>
+                </View>
 
-                    <View style={styles.buttonsContainer}>
-                        <View style={styles.buttonsRow}>
-                            <Input
-                                placeholder='Mängija nimi'
-                                containerStyle={{flex: 0.6, justifyContent: 'center'}}
-                                autoCapitalize='words'
-                                inputContainerStyle={styles.inputContainerStyle}
-                            />
-                            <Button
-                                title='Lisa mängija'
-                                icon={
-                                    <MaterialIcon
-                                    name="person-add"
-                                    size={15}
-                                    color="white"
-                                    style = {{paddingRight: 10}}
-                                    />
-                                }
-                                containerStyle={{flex: 0.4, justifyContent: 'center'}}
-                            />
-                        </View>
-                        
-                        <View style={styles.buttonsRow}>
-                            <Button
-                                title='Lisa mind'
-                                containerStyle={{flex: 1, marginRight: 2, justifyContent: 'center'}}
-                                disabled={this.state.itselfAdded}
-                                onPress={() => { this.setState({itselfAdded: true} , this.addItself)}}
-                            />
-                            <Button
-                                title='Eemalda mind'
-                                containerStyle={{flex: 1, justifyContent: 'center'}}
-                                disabled={!this.state.itselfAdded}
-                                onPress={() => { this.setState({itselfAdded: false}, this.removeItself)}}
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.tableContainer}>
-
-                        <FlatList 
-                            style={styles.FlatList}
-                            persistentScrollbar={true}
-                            data={this.state.players}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={this.renderItem}
+                <View style={styles.buttonsContainer}>
+                    <View style={styles.buttonsRow}>
+                        <Input
+                            placeholder='Mängija nimi'
+                            containerStyle={{flex: 0.6, justifyContent: 'center'}}
+                            autoCapitalize='words'
+                            inputContainerStyle={styles.inputContainerStyle}
+                            onChangeText={playerName => this.setState({ playerName })}
+                            value={this.state.playerName}
+                            onSubmitEditing={() => { this.searchUserByName() }}
                         />
-
+                        <Button
+                            title='Lisa mängija'
+                            icon={
+                                <MaterialIcon
+                                name="person-add"
+                                size={15}
+                                color="white"
+                                style = {{paddingRight: 10}}
+                                />
+                            }
+                            containerStyle={{flex: 0.4, justifyContent: 'center'}}
+                            onPress = { () => { this.searchUserByName() }}
+                        />
                     </View>
                     
-                {/* </ScrollView> */}
+                    <View style={styles.buttonsRow}>
+                        <Button
+                            title='Lisa mind'
+                            containerStyle={{flex: 1, marginRight: 2, justifyContent: 'center'}}
+                            disabled={this.state.itselfAdded}
+                            onPress={() => { 
+                                this.setState({itselfAdded: true})
+                                this.addPlayer(this.state.itselfUID)
+                            }}
+                        />
+                        <Button
+                            title='Eemalda mind'
+                            containerStyle={{flex: 1, justifyContent: 'center'}}
+                            disabled={!this.state.itselfAdded}
+                            onPress={() => {
+                                this.setState({itselfAdded: false})
+                                this.removePlayer(this.state.itselfUID)
+                            }}
+                        />
+                    </View>
+                </View>
+
+                <View style={styles.tableContainer}>
+
+                    <FlatList 
+                        style={styles.FlatList}
+                        persistentScrollbar={true}
+                        data={this.state.players}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={this.renderItem}
+                    />
+
+                </View>
+
+                <View style={styles.bottomContainer}>
+                    <Button
+                        title='Alusta'
+                        containerStyle={{width: '30%'}}
+                        icon={
+                            <MaterialIcon
+                                name="check"
+                                size={20}
+                                color="white"
+                                style = {{paddingRight: 10}}
+                            />
+                        }
+                        onPress={() => {
+                            this.props.navigation.navigate('TrainingMarking', {
+                                course: this.state.course,
+                                players: this.state.players
+                            })
+                        }}
+                    />
+                </View>
             </View>
         );
     }
@@ -210,13 +271,13 @@ const styles = StyleSheet.create({
     },
     courseContainer: {
         flex: 0.2,
-        borderWidth: 1,
-        borderColor: 'yellow',
+        // borderWidth: 1,
+        // borderColor: 'yellow',
         alignItems: 'center',
         justifyContent: 'center'
     },
     tableContainer: {
-        flex: 0.55,
+        flex: 0.5,
         borderWidth: 1,
         borderColor: '#e8e8e8',
         borderRadius: 10,
@@ -261,4 +322,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    bottomContainer: {
+        flex: 0.1,
+        alignItems: 'center'
+    }
 })

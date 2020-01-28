@@ -7,6 +7,7 @@ import TrainingCreationScreen from './TrainingCreationScreen'
 import CourseCreationScreen from './../CourseCreationScreen'
 import CourseCreationBasketScreen from './../CourseCreationBasketScreen'
 import PlayerAddScreen from './PlayerAddScreen'
+import TrainingMarkingScreen from './TrainingMarkingScreen'
 
 const TrainingsStack = createStackNavigator(
 	{
@@ -39,7 +40,13 @@ const TrainingsStack = createStackNavigator(
 			navigationOptions: {
 				title: 'Treeningus osalejad'
 			}
-		}
+		},
+		TrainingMarking: {
+			screen: TrainingMarkingScreen,
+			navigationOptions: {
+				title: 'Märkimine'
+			}
+		},
 	},
 	{
 		initialRouteName: 'Landing',

@@ -160,6 +160,7 @@ export default class SignUp extends React.Component {
             <Input
                 label="Email:"
                 placeholder="Email"
+                keyboardType='email-address'
                 autoCapitalize="none"
                 leftIcon={() => {
                     return <MaterialIcon name='email' size={20} color="gray" />;

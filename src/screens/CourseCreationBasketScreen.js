@@ -78,8 +78,12 @@ export default class CourseCreationBasketSreen extends React.Component {
             country: this.state.country,
             tracks: pickerItemsWithoutValue,
         })
-        .then(function() {
-            console.log("Document successfully written!");
+        .then(() => {
+            console.log("Document successfully written!")
+            this.props.navigation.popToTop() 
+            && this.props.navigation.navigate('PlayerAdd', {
+                course: this.state.course
+            });
         })
         .catch(function(error) {
             console.error("Error writing document: ", error);
