@@ -8,6 +8,7 @@ import CourseCreationScreen from './../CourseCreationScreen'
 import CourseCreationBasketScreen from './../CourseCreationBasketScreen'
 import PlayerAddScreen from './PlayerAddScreen'
 import TrainingMarkingScreen from './TrainingMarkingScreen'
+import FinalScorecardScreen from './FinalScorecardScreen'
 
 const TrainingsStack = createStackNavigator(
 	{
@@ -45,6 +46,12 @@ const TrainingsStack = createStackNavigator(
 			screen: TrainingMarkingScreen,
 			navigationOptions: {
 				title: 'Märkimine'
+			}
+		},
+		FinalScorecard: {
+			screen: FinalScorecardScreen,
+			navigationOptions: {
+				title: 'Tulemused'
 			}
 		},
 	},

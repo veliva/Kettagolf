@@ -170,7 +170,7 @@ export default class TrainingCreationSreen extends React.Component {
             <View style={styles.container}>
 
                 <View style={styles.courseContainer}>
-                    <Text style={styles.courseText}>Rada: {this.state.course}</Text>
+                    <Text style={styles.courseText}>{this.state.course}</Text>
                 </View>
 
                 <View style={styles.buttonsContainer}>
@@ -248,7 +248,8 @@ export default class TrainingCreationSreen extends React.Component {
                         onPress={() => {
                             this.props.navigation.navigate('TrainingMarking', {
                                 course: this.state.course,
-                                players: this.state.players
+                                players: this.state.players,
+                                upload: true
                             })
                         }}
                     />
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
     },
     courseText: {
         fontWeight: 'bold',
-        fontSize: 50
+        fontSize: 35
     },
     buttonsRow: {
         flexDirection: 'row', 

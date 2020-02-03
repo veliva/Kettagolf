@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'r
 import { Button } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 // results: [
@@ -15,7 +14,9 @@ import firestore from '@react-native-firebase/firestore';
 //                 diff: -1,
 //                 OB: 0
 //             }
-//         ]
+//         ],
+//         sum: 0,
+//         diff: 0
 //     }
 // ]
 
@@ -25,12 +26,15 @@ export default class TrainingMarkingScreen extends React.Component {
         this.inputs = {};
         this.state = {
             course: null,
+            courseid: null,
             players: [],
             tracks: [{label: '', par: ''}],
             focusedInput: 0,
             focusedTrack: 0,
             results: null,
             focused: true,
+            upload: false,
+            trainingid: null,
         };
 
         this.selected = {
@@ -47,14 +51,42 @@ export default class TrainingMarkingScreen extends React.Component {
         await this.setState({
             course: this.props.navigation.state.params.course,
             players: this.props.navigation.state.params.players,
+            upload: this.props.navigation.state.params.upload,
+            creationTime: Date.now()
         })
         
         await this.getCourseDataFromFirestore()
         await console.log(this.state.tracks)
 
         this.initResults()
-        // console.log(this.state.results[0])
         this.inputs['input_0'].setNativeProps({style: this.selected});
+
+        if(this.state.upload) {
+            const ref = firestore().collection('trainings').doc();
+            const myId = ref.id;
+            this.uploadToFirestore(myId)
+            console.log(myId)
+        }
+    }
+
+    uploadToFirestore = (myId) => {
+        firestore().collection('trainings').doc(myId).set({
+            course: this.state.course,
+            courseid: this.state.courseid,
+            results: this.state.results,
+            creationTime: this.state.creationTime,
+            finished: false
+        })
+        .then(() => {
+            console.log("Document successfully written!")
+            this.setState({
+                upload: false,
+                trainingid: myId
+            })
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
     }
 
     async getCourseDataFromFirestore() {
@@ -63,7 +95,10 @@ export default class TrainingMarkingScreen extends React.Component {
             // console.log(snapshot._docs[0].id)
             // console.log(snapshot._docs[0])
             // console.log(snapshot._docs[0]._data.tracks)
-            this.setState({tracks: snapshot._docs[0]._data.tracks})
+            this.setState({
+                tracks: snapshot._docs[0]._data.tracks,
+                courseid: snapshot._docs[0].id
+            })
 		})
 		.catch(err => {
 			console.log('Error getting documents', err);
@@ -85,6 +120,7 @@ export default class TrainingMarkingScreen extends React.Component {
         for(let i=0; i<this.state.players.length; i++) {
             let obj = {
                 uid: this.state.players[i].uid,
+                name: this.state.players[i].fullName,
                 playerResults: JSON.parse(JSON.stringify(trackObj)),
                 sum: 0,
                 diff: 0
@@ -134,6 +170,13 @@ export default class TrainingMarkingScreen extends React.Component {
             })
         } else if(value === 'next') {
             if(this.state.focusedTrack+1 > this.state.tracks.length-1) {
+                this.props.navigation.navigate('FinalScorecard', {
+                    course: this.state.course,
+                    courseid: this.state.courseid,
+                    trainingid: this.state.trainingid,
+                    creationTime: this.state.creationTime,
+                    tracks: this.state.tracks,
+                })
                 return
             }
             this.setState({
@@ -366,7 +409,11 @@ export default class TrainingMarkingScreen extends React.Component {
                                     }
                                     containerStyle={{justifyContent: 'center', flex: 1, width: '85%', alignSelf: 'center', justifyContent: 'center'}}
                                     buttonStyle={{flex: 0.95}}
-                                    onPress={() => { this.changeFocusedTrack('next'), this.calculateScore() }}
+                                    onPress={() => { 
+                                        this.calculateScore(),
+                                        this.uploadToFirestore(this.state.trainingid),
+                                        this.changeFocusedTrack('next')
+                                    }}
                                 />
                             </View>
                         </View>
