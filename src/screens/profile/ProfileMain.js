@@ -87,6 +87,7 @@ export default class Main extends React.Component {
 	chooseFile = () => {
         let options = {
 			title: 'Select Image',
+			quality: 0.3,
 			storageOptions: {
 				skipBackup: true,
 				path: 'Kettagolf',

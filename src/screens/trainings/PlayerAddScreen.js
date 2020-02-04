@@ -14,6 +14,7 @@ export default class TrainingCreationSreen extends React.Component {
             course: null,
             itselfAdded: true,
             players: [],
+            playerIDs: [],
             player: null,
             playerName: null,
             itselfUID: null
@@ -33,9 +34,11 @@ export default class TrainingCreationSreen extends React.Component {
 
     async removePlayer(userID) {
         await this.setState(prevState => ({
-            players: prevState.players.filter(element => element.uid !== userID)
+            players: prevState.players.filter(element => element.uid !== userID),
+            playerIDs: prevState.playerIDs.filter(element => element !== userID)
         }));
         console.log(this.state.players)
+        console.log(this.state.playerIDs)
     }
 
     async addPlayer(userID) {
@@ -44,10 +47,12 @@ export default class TrainingCreationSreen extends React.Component {
 
         await this.setState({
             players: [...this.state.players, this.state.player],
+            playerIDs: [...this.state.playerIDs, this.state.player.uid],
             player: null
         });
         console.log(this.state.players)
         console.log(this.state.player)
+        console.log(this.state.playerIDs)
     }
 
     async userDataFromFirestore(userID) {
@@ -249,6 +254,7 @@ export default class TrainingCreationSreen extends React.Component {
                             this.props.navigation.navigate('TrainingMarking', {
                                 course: this.state.course,
                                 players: this.state.players,
+                                playerIDs: this.state.playerIDs,
                                 upload: true
                             })
                         }}

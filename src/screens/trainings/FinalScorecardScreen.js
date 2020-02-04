@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, FlatList, ScrollView, SafeAreaView } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { Button, Avatar } from 'react-native-elements';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -27,12 +27,26 @@ export default class TrainingMarkingScreen extends React.Component {
             resultsOrdered: null,
             images: [],
             databaseDone: false,
-            tracks: null
+            tracks: null,
+            finished: null,
         };
     }
 
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: () => (
+                <MaterialCommunityIcon
+                    name='delete-forever-outline'
+                    style={{marginRight: 15, color: 'red'}}
+                    size={25}
+                    onPress={navigation.getParam('deleteTraining')}
+                />
+            ),
+        };
+    };
+
     async componentDidMount() {
-        console.log('FINAL SCORECARD MOUNT')
+        this.props.navigation.setParams({ deleteTraining: this.deleteTraining});
 
         await this.setState({
             course: this.props.navigation.state.params.course,
@@ -55,14 +69,17 @@ export default class TrainingMarkingScreen extends React.Component {
         const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
         const year = a.getFullYear();
         const month = months[a.getMonth()];
-        const date = a.getDate();
+        let date = a.getDate();
         let hour = a.getHours();
+        let min = a.getMinutes();
         if(hour < 10) {
             hour = '0' + hour
         }
-        let min = a.getMinutes();
         if(min < 10) {
             min = '0' + min
+        }
+        if(date < 10) {
+            date = '0' + date
         }
         const time = date + '.' + month + '.' + year + ' ' + hour + ':' + min ;
         return time
@@ -75,6 +92,7 @@ export default class TrainingMarkingScreen extends React.Component {
             this.setState({
                 results: snapshot._data.results,
                 resultsOrdered: ordered,
+                finished: snapshot._data.finished
             })
 		})
 		.catch(err => {
@@ -85,7 +103,6 @@ export default class TrainingMarkingScreen extends React.Component {
     async imageFromFirebaseStorage(userID) {
 		const imageRef = firebase.storage().ref('profilePictures').child(userID);
 		await imageRef.getDownloadURL().then(result => {
-            // console.log(result)
             const user = {uid: userID, uri: result}
             this.setState({
                 images: [...this.state.images, user],
@@ -98,8 +115,51 @@ export default class TrainingMarkingScreen extends React.Component {
     }
 
     finishTraining = () => {
-        const trainingref = firestore().collection('trainings').doc(this.state.trainingid)
-        trainingref.update({finished: true});
+        Alert.alert(
+            'Lõpeta treening',
+            'Kas soovid tulemused kinnitada ja treeningu lõpetada?',
+            [
+                {text: 'Ei', },
+                {
+                    text: '',
+                },
+                {text: 'Jah', onPress: () => { 
+                        const trainingref = firestore().collection('trainings').doc(this.state.trainingid)
+                        trainingref.update({finished: true});
+                        this.setState({ finished: true })
+                        this.props.navigation.popToTop() &&
+                        this.props.navigation.navigate('FinalScorecard', {
+                            course: this.state.course,
+                            courseid: this.state.courseid,
+                            trainingid: this.state.trainingid,
+                            creationTime: this.state.creationTime,
+                            tracks: this.state.tracks,
+                        })
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
+    }
+
+    deleteTraining = () => {
+        Alert.alert(
+            'Kustuta treening',
+            'Kas oled kindel, et soovid treeningu kustutada?',
+            [
+                {text: 'Ei', },
+                {
+                    text: '',
+                },
+                {text: 'Jah', onPress: () => { 
+                        const trainingref = firestore().collection('trainings').doc(this.state.trainingid)
+                        trainingref.delete()
+                        this.props.navigation.popToTop()
+                    }
+                },
+            ],
+            {cancelable: false},
+        );
     }
 
     renderItemStandingsTable = ({item, index}) => {
@@ -171,13 +231,17 @@ export default class TrainingMarkingScreen extends React.Component {
                         }
                     </View>
 
-                    <View>
-                        <Button
-                            title='Lõpeta treening'
-                            containerStyle={{alignSelf: 'center', width: '60%'}}
-                            onPress={() => this.finishTraining()}
-                        />
-                    </View>
+                    
+                        {this.state.finished !== true && this.state.finished !== null &&
+                            <View>
+                                <Button
+                                    title='Lõpeta treening'
+                                    containerStyle={{alignSelf: 'center', width: '60%'}}
+                                    onPress={() => this.finishTraining()}
+                                />
+                            </View>
+                        }
+                    
                 </View>
             </ScrollView>
         )
@@ -197,7 +261,7 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         marginBottom: 30,
-        marginTop: 30,
+        marginTop: 20,
         justifyContent: 'center'
     },
     courseNameText: {

@@ -5,21 +5,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import firestore from '@react-native-firebase/firestore';
 
-// results: [
-//     {
-//         uid: 123,
-//         playerResults: [
-//             {
-//                 result: 3,
-//                 diff: -1,
-//                 OB: 0
-//             }
-//         ],
-//         sum: 0,
-//         diff: 0
-//     }
-// ]
-
 export default class TrainingMarkingScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -28,6 +13,7 @@ export default class TrainingMarkingScreen extends React.Component {
             course: null,
             courseid: null,
             players: [],
+            playerIDs: [],
             tracks: [{label: '', par: ''}],
             focusedInput: 0,
             focusedTrack: 0,
@@ -51,12 +37,12 @@ export default class TrainingMarkingScreen extends React.Component {
         await this.setState({
             course: this.props.navigation.state.params.course,
             players: this.props.navigation.state.params.players,
+            playerIDs: this.props.navigation.state.params.playerIDs,
             upload: this.props.navigation.state.params.upload,
             creationTime: Date.now()
         })
         
         await this.getCourseDataFromFirestore()
-        await console.log(this.state.tracks)
 
         this.initResults()
         this.inputs['input_0'].setNativeProps({style: this.selected});
@@ -65,7 +51,6 @@ export default class TrainingMarkingScreen extends React.Component {
             const ref = firestore().collection('trainings').doc();
             const myId = ref.id;
             this.uploadToFirestore(myId)
-            console.log(myId)
         }
     }
 
@@ -75,10 +60,10 @@ export default class TrainingMarkingScreen extends React.Component {
             courseid: this.state.courseid,
             results: this.state.results,
             creationTime: this.state.creationTime,
-            finished: false
+            finished: false,
+            playerIDs: this.state.playerIDs
         })
         .then(() => {
-            console.log("Document successfully written!")
             this.setState({
                 upload: false,
                 trainingid: myId
@@ -92,9 +77,6 @@ export default class TrainingMarkingScreen extends React.Component {
     async getCourseDataFromFirestore() {
 		await firestore().collection('courses').where("name", "==", this.state.course).get()
 		.then(snapshot => {
-            // console.log(snapshot._docs[0].id)
-            // console.log(snapshot._docs[0])
-            // console.log(snapshot._docs[0]._data.tracks)
             this.setState({
                 tracks: snapshot._docs[0]._data.tracks,
                 courseid: snapshot._docs[0].id
@@ -214,7 +196,6 @@ export default class TrainingMarkingScreen extends React.Component {
     }
 
     calculateScore = () => {
-        console.log('CALCULATE SCORE')
         let arr = []
 
         for(let i=0; i < this.state.players.length; i++) {
@@ -230,7 +211,6 @@ export default class TrainingMarkingScreen extends React.Component {
             arr.push({sum: sum, diff: diff})
         }
 
-        console.log(arr)
         let updatedArray = [...this.state.results];
         for(let key in updatedArray) {
             if (updatedArray.hasOwnProperty(key)) {
@@ -242,7 +222,6 @@ export default class TrainingMarkingScreen extends React.Component {
     }
 
     renderItem = ({item, index}) => {
-        // console.log(JSON.stringify(item))
         if(this.state.results !== null) {
             const OBvalue = this.state.results[index].playerResults[this.state.focusedTrack].OB
             let test = ''
@@ -297,7 +276,6 @@ export default class TrainingMarkingScreen extends React.Component {
                 <FlatList
                     style = {styles.FlatList}
                     data={this.state.players}
-                    // ItemSeparatorComponent={this.FlatListItemSeparator}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
                 />
