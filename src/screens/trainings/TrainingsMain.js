@@ -3,7 +3,6 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
 
 import LandingScreen from './LandingScreen'
-import TrainingCreationScreen from './TrainingCreationScreen'
 import CourseCreationScreen from './../CourseCreationScreen'
 import CourseCreationBasketScreen from './../CourseCreationBasketScreen'
 import PlayerAddScreen from './PlayerAddScreen'
@@ -16,12 +15,6 @@ const TrainingsStack = createStackNavigator(
 			screen: LandingScreen,
 			navigationOptions: {
 				title: 'Treeningud'
-			}
-		},
-		TrainingCreation: {
-			screen: TrainingCreationScreen,
-			navigationOptions: {
-				title: 'Treeningu andmed'
 			}
 		},
 		CourseCreation: {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, Alert, KeyboardAvoidingView } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Button } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
 
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -11,6 +11,8 @@ export default class LandingScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            course: null,
+            coursesArr: [],
             trainings: [],
             tracksArr: [],
             tracks: null
@@ -23,11 +25,12 @@ export default class LandingScreen extends React.Component {
         this.props.navigation.addListener(
             'didFocus',
             param => {
+                console.log('didFocus Landing')
                 this.getTrainingsFromFirestore();
             }
         );
 
-        this.getTrainingsFromFirestore()
+        // this.getTrainingsFromFirestore()
     }
 
     async getTrainingsFromFirestore() {
@@ -38,6 +41,7 @@ export default class LandingScreen extends React.Component {
             console.log(`Received query snapshot of size ${querySnapshot.size}`);
             if(querySnapshot._docs.length > 0) {
                 let arr = []
+                let coursesArr = []
                 for(var i=0; i<querySnapshot._docs.length; i++)  {
                     let element = querySnapshot._docs[i]._data
                     element.trainingid = querySnapshot._docs[i].id
@@ -45,8 +49,10 @@ export default class LandingScreen extends React.Component {
                     element.tracks = this.state.tracks
                     element.formatedCreationTime = this.timeConverter(element.creationTime)
                     arr.push(element);
+                    coursesArr.push(element.course)
                 }
                 this.setState({trainings: arr})
+                this.suggestedCourses(coursesArr)
             }
         }, err => {
             console.log(`Encountered error: ${err}`);
@@ -64,17 +70,46 @@ export default class LandingScreen extends React.Component {
 		});
     }
 
-    getCourseDataFromFirestore = (trainingid) => {
-		firestore().collection('courses').doc(trainingid).get()
+    getCourseDataFromFirestore = () => {
+        if(this.state.course === null || this.state.course === '') {
+            return
+        }
+		firestore().collection('courses').where("name", "==", this.state.course).get()
 		.then(snapshot => {
-            this.setState({
-                tracks: snapshot._docs[0]._data.tracks,
-                courseid: snapshot._docs[0].id
-            })
+            if(snapshot._docs.length === 0) {
+                Alert.alert(
+                    'Tundmatu rada',
+                    'Sellise nimega rada pole andmebaasis. Kas soovid selle lisada?',
+                    [
+                        {text: 'Ei', onPress: () => console.log('Ei vajutatud')},
+                        {
+                            text: '',
+                        },
+                        {text: 'Jah', onPress: () => {
+                                this.props.navigation.navigate('CourseCreation', {course: this.state.course})
+                            }
+                        },
+                    ],
+                    {cancelable: false},
+                );
+            } else {
+                console.log(snapshot._docs[0].id)
+                this.props.navigation.navigate('PlayerAdd', {course: this.state.course})
+            }
 		})
 		.catch(err => {
 			console.log('Error getting documents', err);
 		});
+    }
+    
+    suggestedCourses = (coursesArr) => {
+        const filteredSet = new Set(coursesArr)
+        const filteredArr = [...filteredSet]
+        if(filteredArr.length > 5) {
+            this.setState({coursesArr: filteredArr.slice(0,5)})
+            return
+        }
+        this.setState({coursesArr: filteredArr})
     }
 
     timeConverter(UNIX_timestamp) {
@@ -120,7 +155,7 @@ export default class LandingScreen extends React.Component {
                             style={{marginRight: 15, color: 'black'}}
                             size={15}
                         />
-                        <View style={{flex: 1, flexWrap: 'wrap'}}>
+                        <View style={{flexWrap: 'wrap'}}>
                             <Text style={{textAlignVertical: 'center', fontWeight: 'bold', fontSize: 15}}>{item.course} 
                             </Text>
                         </View>
@@ -147,18 +182,56 @@ export default class LandingScreen extends React.Component {
         )
     }
 
+    renderItemSuggested = ({item, index}) => {
+        return(
+            <View style={styles.suggestedRow}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('PlayerAdd', {course: item})}>
+                    <Text style={{fontSize: 20, textAlignVertical: 'center', marginLeft: 5}}>{item}</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     render() {
         return (
-            <View style={styles.container}>
-                <View style = {{flex: 1, justifyContent: 'center'}}>
-                    <TouchableOpacity 
-                        style = {styles.button} 
-                        onPress={() => this.props.navigation.navigate('TrainingCreation')}>
-                        <Text>Alusta treeningut</Text>
-                    </TouchableOpacity>
+            <KeyboardAvoidingView style={styles.container} behavior='height' enabled>
+                <View style = {styles.createTrainingContainer}>
+                    <Input
+                        label='Rada:'
+                        placeholder="Rada"
+                        autoCapitalize="sentences"
+                        leftIcon={
+                            <MaterialCommunityIcon
+                                name='flag'
+                                size={24}
+                                color='black'
+                            />
+                        }
+                        inputContainerStyle={styles.inputContainerStyle}
+                        onChangeText={course => this.setState({ course })}
+                        value={this.state.course}
+                    />
+                    <Button
+                        title='Alusta treeningut'
+                        containerStyle={{marginTop: 5}}
+                        buttonStyle={{borderRadius: 8}}
+                        onPress = {() => this.getCourseDataFromFirestore()}
+                    />
+
+                    <View style={{width: '95%', marginTop: 10}}>
+                        <Text style={{textAlign: 'left', fontWeight: 'bold', fontSize: 15}}>Alusta treeningut rajal: </Text>
+
+                        <FlatList
+                            data={this.state.coursesArr}
+                            renderItem={this.renderItemSuggested}
+                            keyExtractor={(item, index) => index.toString()}
+                            style={{marginBottom: 30}}
+                        />
+                    </View>
                 </View>
-                <View style = {{flex: 2, width: '95%'}}>
-                    <Text>Minu treeningud:</Text>
+                
+                <View style = {styles.trainingsContainer}>
+                    <Text style={{fontWeight: 'bold', fontSize: 20, marginBottom: 5}}>Minu treeningud:</Text>
 
                     <FlatList
                         data={this.state.trainings}
@@ -167,7 +240,7 @@ export default class LandingScreen extends React.Component {
                         style={styles.FlatList}
                     />
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -175,14 +248,7 @@ export default class LandingScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    button: {
-        marginTop: 8,
-        padding: 8,
-        backgroundColor: '#4293f5',
-        borderRadius: 8
+        alignItems: 'center',
     },
     FlatList: {
         borderWidth: 2,
@@ -195,5 +261,28 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderRadius: 5,
         margin: 2,
+    },
+    trainingsContainer: {
+        flex: 1,
+        width: '95%',
+    },
+    createTrainingContainer: {
+        width: '95%', 
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 5,
+        marginTop: 5,
+        marginBottom: 30,
+    },
+    inputContainerStyle: {
+        borderWidth: 2, 
+        borderColor: 'gray', 
+        borderRadius: 10,
+    },
+    suggestedRow: {
+        backgroundColor: '#cfcfcf',
+        marginTop: 4,
+        borderRadius: 5,
     },
   })

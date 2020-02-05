@@ -93,6 +93,9 @@ export default class TrainingCreationSreen extends React.Component {
     }
 
     searchUserByName = () => {
+        if(this.state.playerName === null || this.state.playerName === '') {
+            return
+        }
         firestore().collection('users').where("fullName", "==", this.state.playerName).get()
 		.then(snapshot => {
             if(snapshot._docs.length === 0) {
