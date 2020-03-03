@@ -1,80 +1,130 @@
 import React from 'react'
-import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { firebase } from '@react-native-firebase/auth';
+import { Input, Button } from 'react-native-elements';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 export default class Login extends React.Component {
     state = { 
         email: '', 
-        password: '', 
-        errorMessage: null 
+        password: '',
     }  
   
     handleLogin = () => {
-        // TODO: Firebase stuff...
         console.log('handleLogin')
-
         const { email, password } = this.state
+
+        if(email === '') {
+            Alert.alert(
+                'Email',
+                'Palun sisesta email.',
+            )
+            return
+        }
+        if(password === '') {
+            Alert.alert(
+                'Parool',
+                'Palun sisesta parool.',
+            )
+            return
+        }
+        
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then(() => this.props.navigation.navigate('TabNavigator'))
-            .catch(error => this.setState({ errorMessage: error.message }))
+            .catch(error => Alert.alert(
+                'Error',
+                error.message,
+            ))
     }  
   
     render() {
         return (
             <View style={styles.container}>
-                <Text>Logi sisse</Text>
 
-                {this.state.errorMessage &&
-                <Text style={{ color: 'red' }}>
-                    {this.state.errorMessage}
-                </Text>}
+                <View style={{flex: 0.4, justifyContent: 'flex-end'}}>
+                    <Text style={{fontWeight: 'bold', fontSize: 25, color: '#ffff', marginBottom: 30}}>Logi sisse</Text>
+                </View>
 
-                <TextInput
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
+                <View style={[styles.container, {width: '85%'}]}>
+                    <Input
+                        label="Email:"
+                        placeholder="Email"
+                        placeholderTextColor="#ffff"
+                        keyboardType='email-address'
+                        autoCapitalize="none"
+                        leftIcon={() => {
+                            return <MaterialIcon name='email' size={20} color="#ffff" />;
+                        }}
+                        style={styles.textInput}
+                        onChangeText={email => this.setState({ email })}
+                        value={this.state.email}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        labelStyle={{color: '#ffff', marginBottom: 7}}
+                        inputStyle={{color: '#ffff'}}
+                    />
 
-                <TextInput
-                    secureTextEntry
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    placeholder="Parool"
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                <TouchableOpacity onPress={this.handleLogin} style = {styles.button} >
-                    <Text>Logi sisse</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')} style = {styles.button} >
-                    <Text>Pole kasutajat? Registreeru!</Text>
-                </TouchableOpacity>
+                    <Input
+                        secureTextEntry
+                        label="Parool:"
+                        placeholder="Parool"
+                        placeholderTextColor="#ffff"
+                        autoCapitalize="none"
+                        leftIcon={() => {
+                            return <MaterialIcon name='vpn-key' size={20} color="#ffff" />;
+                        }}
+                        onChangeText={password => this.setState({ password })}
+                        value={this.state.password}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        containerStyle={{marginTop: 10}}
+                        labelStyle={{color: '#ffff', marginBottom: 7}}
+                        inputStyle={{color: '#ffff'}}
+                    />
+
+                    <Button
+                        buttonStyle={styles.button}
+                        containerStyle={{width: '100%', alignItems: 'center', marginTop: 10}}
+                        title="Logi sisse"
+                        onPress={this.handleLogin}
+                        titleStyle={{color: '#4aaff7'}}
+                    />
+
+                    <View style={{flexDirection: 'row', marginTop: 30}}>
+                        <Text style={{fontSize: 15, textAlignVertical: 'center', color: '#ffff'}}>Pole kasutajat? </Text>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('SignUp')}>
+                            <Text style={{fontWeight: 'bold', fontSize: 20, textAlignVertical: 'center', color: '#ffff'}}>Registreeru!</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  textInput: {
-    height: 40,
-    width: '90%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 8
-  },
-  button: {
-      marginTop: 8,
-      padding: 8,
-      backgroundColor: '#4293f5',
-      borderRadius: 8
-  }
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#168bde'
+    },
+    textInput: {
+        height: 40,
+        width: '90%',
+        borderColor: '#ffff',
+        borderWidth: 1,
+        marginTop: 8
+    },
+    inputContainerStyle: {
+        borderBottomWidth: 0,
+        backgroundColor: '#4aaff7',
+        borderRadius: 8,
+    },
+    button: {
+        marginTop: 12,
+        padding: 12,
+        backgroundColor: '#ffff',
+        borderRadius: 20,
+        width: '95%'
+    }
 })
