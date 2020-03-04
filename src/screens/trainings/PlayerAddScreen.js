@@ -61,12 +61,10 @@ export default class TrainingCreationSreen extends React.Component {
 			// console.log(snapshot._data)
 			const data = snapshot._data
             const name = data.firstName + ' ' + data.lastName
-            const rating = data.rating
             this.setState({
                 player: {
                     uid: userID,
                     fullName: name,
-                    rating: rating,
                     imageURI: null
                 }
             })
@@ -135,21 +133,20 @@ export default class TrainingCreationSreen extends React.Component {
                     source={{
                       uri: item.imageURI,
                     }}
-                    containerStyle={{height: 100, width: 100}}
+                    containerStyle={{height: 85, width: 85}}
                 />
+
                 <View style={styles.rowName}>
                     <Text style={{fontWeight: 'bold', fontSize: 17}}>{item.fullName}</Text>
                 </View>
-                <View style={styles.rowRating}>
-                    <Text style={{fontWeight: 'bold', fontSize: 17}}>Rating: {item.rating}</Text>
-                </View>
+
                 <Button
                     containerStyle={{justifyContent: 'center'}}
                     buttonStyle={{backgroundColor: 'gray'}}
                     icon={
                         <MaterialIcon
                         name="close"
-                        size={30}
+                        size={25}
                         color="red"
                         />
                     }
@@ -281,8 +278,6 @@ const styles = StyleSheet.create({
     },
     courseContainer: {
         flex: 0.2,
-        // borderWidth: 1,
-        // borderColor: 'yellow',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -325,12 +320,8 @@ const styles = StyleSheet.create({
     rowName: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-    },
-    rowRating: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        paddingLeft: 25
     },
     bottomContainer: {
         flex: 0.1,

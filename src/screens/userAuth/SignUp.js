@@ -19,7 +19,7 @@ export default class SignUp extends React.Component {
             firstName: '', 
             lastName: '',
             fullName: '',
-            gender: 'male',
+            gender: 'Mees',
             birthYear: '',
             country: '',
             pdgaNumber: null,
@@ -81,7 +81,6 @@ export default class SignUp extends React.Component {
                     gender: this.state.gender,
                     birthYear: this.state.birthYear,
                     country: this.state.country,
-                    rating: 0,
                     pdgaNumber: this.state.pdgaNumber
                 });
                 
@@ -254,8 +253,8 @@ export default class SignUp extends React.Component {
                             onValueChange={(itemValue, itemIndex) =>
                                 this.setState({gender: itemValue}, console.log(this.state.gender))
                             }>
-                            <Picker.Item label="Mees" value="male" />
-                            <Picker.Item label="Naine" value="female" />
+                            <Picker.Item label="Mees" value="Mees" />
+                            <Picker.Item label="Naine" value="Naine" />
                         </Picker>
                     </View>
 

@@ -57,35 +57,40 @@ export default class MoreMain extends React.Component {
                                     titleStyle={styles.buttonTitleStyle}
                                     onPress={this.handleSignOut}
                                 />
-                                <Button
-                                    icon={
-                                        <MaterialCommunityIcon
-                                        name="information-outline"
-                                        size={15}
-                                        color="black"
-                                        style = {{paddingRight: 10}}
-                                        />
-                                    }
-                                    title='Rakenduse info'
-                                    buttonStyle={styles.button}
-                                    titleStyle={styles.buttonTitleStyle}
-                                    onPress={() => this.props.navigation.navigate('About')}
-                                />
-                                <Button
-                                    icon={
-                                        <FontAwesome5Icon
-                                        name="github"
-                                        size={15}
-                                        color="black"
-                                        style = {{paddingRight: 10}}
-                                        />
-                                    }
-                                    title='Lähtekood GitHubis'
-                                    buttonStyle={styles.button}
-                                    titleStyle={styles.buttonTitleStyle}
-                                    onPress={ ()=>{ Linking.openURL('https://github.com/veliva/Kettagolf')}}
-                                />
                         </View>
+
+                        <View style={styles.tableElement}>
+                            <Text style={styles.tableElementHeader}>Info</Text>
+                            <Button
+                                icon={
+                                    <MaterialCommunityIcon
+                                    name="information-outline"
+                                    size={15}
+                                    color="black"
+                                    style = {{paddingRight: 10}}
+                                    />
+                                }
+                                title='Teave rakenduse kohta'
+                                buttonStyle={styles.button}
+                                titleStyle={styles.buttonTitleStyle}
+                                onPress={() => this.props.navigation.navigate('About')}
+                            />
+                            <Button
+                                icon={
+                                    <FontAwesome5Icon
+                                    name="github"
+                                    size={15}
+                                    color="black"
+                                    style = {{paddingRight: 10}}
+                                    />
+                                }
+                                title='Lähtekood GitHubis'
+                                buttonStyle={styles.button}
+                                titleStyle={styles.buttonTitleStyle}
+                                onPress={ ()=>{ Linking.openURL('https://github.com/veliva/Kettagolf')}}
+                            />
+                        </View>
+
                     </View>
                 </ScrollView>
             </View>
@@ -98,7 +103,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%'
+        width: '100%',
+        backgroundColor: '#9ed6ff'
     },
     tableContainer: {
         flex: 1,
@@ -119,7 +125,7 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 2,
         padding: 8,
-        backgroundColor: '#d1d1d1',
+        backgroundColor: '#e0e0e0',
         width: '100%',
     },
     buttonTitleStyle: {

@@ -22,8 +22,8 @@ const TabNavigator = createBottomTabNavigator(
 		Competitions: { 
 			screen: CompetitionsMainScreen,
 			navigationOptions: ({ navigation }) => ({
-				tabBarIcon: ({ focused }) => <MaterialIcons name="event" size={20} color={focused ? '#000000' : '#878787'}/>,
-				title: 'Võistlused',
+				tabBarIcon: ({ focused }) => <MaterialIcons name="group" size={20} color={focused ? '#000000' : '#878787'}/>,
+				title: 'Mängijad',
 			})
 		},
 		Courses: {
@@ -34,7 +34,7 @@ const TabNavigator = createBottomTabNavigator(
 						? <Image source={require('../assets/discbasket.png')} style={{width: 25, height: 25, tintColor: '#000000'}}  />
 						: <Image source={require('../assets/discbasket.png')} style={{width: 25, height: 25, tintColor: '#878787'}}  /> 
 				),
-				title: 'Rajad',
+				title: 'Pargid',
 			})
 		},
 		Profile: {
@@ -47,8 +47,8 @@ const TabNavigator = createBottomTabNavigator(
 		More: {
 			screen: MoreMainScreen,
 			navigationOptions: ({ navigation }) => ({
-				tabBarIcon: ({ focused }) => <MaterialIcons name="more-horiz" size={20} color={focused ? '#000000' : '#878787'}/>,
-				title: 'Muu',
+				tabBarIcon: ({ focused }) => <MaterialIcons name="menu" size={20} color={focused ? '#000000' : '#878787'}/>,
+				title: 'Valikud',
 			})
 		}
 	},

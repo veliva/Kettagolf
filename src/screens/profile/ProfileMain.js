@@ -17,7 +17,6 @@ export default class Main extends React.Component {
 			currentUser: null,
 			name: null,
 			gender: null,
-			rating: null,
 			country: null,
 			pdgaNumber: null,
 			birthYear: null,
@@ -44,7 +43,6 @@ export default class Main extends React.Component {
 				name: nameFromDB,
 				gender: data.gender,
 				country: data.country,
-				rating: data.rating,
 				pdgaNumber: data.pdgaNumber,
 				birthYear: data.birthYear,
 				email: data.email
@@ -110,10 +108,6 @@ export default class Main extends React.Component {
         return (
             <View style={styles.container}>
 
-				{/* <View style={{backgroundColor: '#001b87', width: '100%'}}>
-					<Text style={{fontSize: 30, alignSelf: 'center', color: 'white'}}>Profiil</Text>
-				</View> */}
-
 				<View style={styles.avatarView}>
 					<Avatar
 						source={{ uri: this.state.fireStorageImageURI }}
@@ -128,49 +122,49 @@ export default class Main extends React.Component {
 					/>
 				</View>
 
-				<View style={{flex: 0.7, width: '100%', alignItems: 'center', backgroundColor: '#e0e0e0'}}>
-
+				<View style={{flex: 0.2, width: '100%', alignItems: 'center', justifyContent: 'center'}}>
 					<Text style={styles.name}>{this.state.name}</Text>
+					<Text style={styles.country}>{this.state.country}</Text>
+				</View>
 
-					<Text style={styles.name}>Reiting: {this.state.rating}</Text>
+				<View style={{flex: 0.5, width: '85%', alignItems: 'center'}}>
 
-					<View style={styles.tableContainer}>
-						<View style={styles.tableRow}>
-							<View style={styles.tableRowElement}>
-								<Text>Riik: {this.state.country}</Text>
-							</View>
-							<View style={styles.tableRowElement}>
-								<Text>PDGA#: {this.state.pdgaNumber}</Text>
-							</View>
-						</View>
-						<View style={styles.tableRow}>
-							<View style={styles.tableRowElement}>
-								<Text>Sugu: {this.state.gender}</Text>
-							</View>
-							<View style={styles.tableRowElement}>
-								<Text>Sünniaasta: {this.state.birthYear}</Text>
-							</View>
-						</View>
-						<View style={styles.tableRow}>
-							<Input
-								placeholder="Email"
-								disabled={true}
-								leftIcon={() => {
-									return <MaterialIcon name='email' size={20} color="gray" />;
-								}}
-								value={this.state.email}
-								inputContainerStyle={{width: '50%', alignSelf: 'center'}}
-							/>
-						</View>
-					</View>
-
-					{/* <Text style={{ alignItems: 'center' }}>
-						{this.state.name}{"\n"}
-						Rating: {this.state.rating}{"\n"}
-						PDGA#: {this.state.rating}{"\n"}
-						Sugu: {this.state.gender}{"\n"}
-						Riik: {this.state.country}{"\n"}
-					</Text> */}
+					<Input
+						label='Email'
+						disabled={true}
+						value={this.state.email}
+						containerStyle={styles.inputContainerStyle}
+						labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+						disabledInputStyle={styles.disabledInputStyle}
+					/>
+					<Input
+						label='Sugu'
+						disabled={true}
+						value={this.state.gender}
+						containerStyle={styles.inputContainerStyle}
+						labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+						disabledInputStyle={styles.disabledInputStyle}
+					/>
+					<Input
+						label='Sünniaasta'
+						disabled={true}
+						value={this.state.birthYear}
+						containerStyle={styles.inputContainerStyle}
+						labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+						disabledInputStyle={styles.disabledInputStyle}
+					/>
+					<Input
+						label='PDGA#'
+						disabled={true}
+						value={this.state.pdgaNumber}
+						containerStyle={styles.inputContainerStyle}
+						labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+						disabledInputStyle={styles.disabledInputStyle}
+					/>
 
 				</View>
 
@@ -182,8 +176,8 @@ export default class Main extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: '#9ed6ff'
     },
     button: {
         marginTop: 8,
@@ -194,30 +188,31 @@ const styles = StyleSheet.create({
 	avatarView: {
 		width: '100%',
 		flex: 0.3,
-		backgroundColor: '#5fedd5',
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'flex-end',
 	},
 	name: {
-		fontSize: 30,
+		fontSize: 34,
 		fontWeight: 'bold',
-		marginTop: 20
+		marginTop: 20,
 	},
-	tableContainer: {
-		width: '90%', 
-		borderWidth: 1, 
-		borderColor: 'black', 
-		flexDirection: 'column',
-		flex: 1
+	country: {
+		fontSize: 15,
+		fontWeight: 'bold',
+		marginTop: 10
 	},
-	tableRow: {
-		width: '100%', 
-		flexDirection: 'row', 
-		alignItems: 'center',
-		flex: 1
+	inputContainerStyle: {
+		width: '85%', 
+		flex: 1,
 	},
-	tableRowElement: {
-		flex: 1, 
-		alignItems: 'center'
+	disabledInputStyle: {
+		color: 'black', 
+		opacity:1
 	},
+    inputLabelStyle: {
+        color: 'black',
+    },
+    inputStyle: {
+        color: 'black'
+    },
 })

@@ -10,7 +10,7 @@ const MoreStack = createStackNavigator(
         Landing: {
             screen: LandingScreen,
             navigationOptions: {
-                title: 'Muu'
+                title: 'Valikud'
             }
         },
         About: {
