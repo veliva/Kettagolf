@@ -20,13 +20,13 @@ const TrainingsStack = createStackNavigator(
 		CourseCreation: {
 			screen: CourseCreationScreen,
 			navigationOptions: {
-				title: 'Lisa rada'
+				title: 'Lisa park'
 			}
 		},
 		CourseCreationBasket: {
 			screen: CourseCreationBasketScreen,
 			navigationOptions: {
-				title: 'Korvide andmed'
+				title: 'Radade andmed'
 			}
 		},
 		PlayerAdd: {

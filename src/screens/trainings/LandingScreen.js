@@ -219,7 +219,7 @@ export default class LandingScreen extends React.Component {
                     />
 
                     <View style={{width: '95%', marginTop: 10}}>
-                        <Text style={{textAlign: 'left', fontWeight: 'bold', fontSize: 15}}>Alusta treeningut rajal: </Text>
+                        <Text style={{textAlign: 'left', fontWeight: 'bold', fontSize: 15}}>Alusta treeningut: </Text>
 
                         <FlatList
                             data={this.state.coursesArr}

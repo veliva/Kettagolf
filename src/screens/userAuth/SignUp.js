@@ -103,54 +103,54 @@ export default class SignUp extends React.Component {
         <View style={styles.container}>
             <Modal visible={this.state.modalVisible}>
                 <View style={{backgroundColor: '#168bde', flex: 1}}>
-                <Button
-                    icon={
-                        <MaterialIcon
-                        name="close"
-                        size={15}
-                        color="white"
-                        style = {{paddingRight: 10}}
-                        />
-                    }
-                    title="Tühista"
-                    onPress = { () => { this.toggleModalVisibility(false) }}
-                    buttonStyle={{backgroundColor: '#4aaff7'}}
-                />
-                <SearchableDropdown
-                    items={countriesJson}
-                    onTextChange
-                    onItemSelect={(value) => {
-                        this.setState({country: value.name})
-                        this.toggleModalVisibility(false)
-                    }}
-                    placeholder={'Vali riik...'}
-                    placeholderTextColor={'white'}
-                    containerStyle={{width: '100%', alignItems: 'center'}}
-                    itemsContainerStyle={{width: '90%'}}
-                    textInputStyle={{
-                        textAlign: 'left', 
-                        width: '90%',
-                        borderWidth: 1,
-                        borderColor: 'white',
-                        borderRadius: 5,
-                        padding: 10,
-                        color: 'white',
-                    }}
-                    itemStyle={{
-                        padding: 10,
-                        marginTop: 2,
-                        backgroundColor: '#ddd',
-                        borderColor: '#bbb',
-                        borderWidth: 1,
-                        borderRadius: 5,
-                    }}
-                    listProps={
-                        {
-                            persistentScrollbar: true,
+                    <Button
+                        icon={
+                            <MaterialIcon
+                            name="close"
+                            size={15}
+                            color="white"
+                            style = {{paddingRight: 10}}
+                            />
                         }
-                    }
-                    itemTextStyle={{ color: '#222' }}
-                />
+                        title="Tühista"
+                        onPress = { () => { this.toggleModalVisibility(false) }}
+                        buttonStyle={{backgroundColor: '#4aaff7'}}
+                    />
+                    <SearchableDropdown
+                        items={countriesJson}
+                        onTextChange
+                        onItemSelect={(value) => {
+                            this.setState({country: value.name})
+                            this.toggleModalVisibility(false)
+                        }}
+                        placeholder={'Vali riik...'}
+                        placeholderTextColor={'white'}
+                        containerStyle={{width: '100%', alignItems: 'center'}}
+                        itemsContainerStyle={{width: '90%'}}
+                        textInputStyle={{
+                            textAlign: 'left', 
+                            width: '90%',
+                            borderWidth: 1,
+                            borderColor: 'white',
+                            borderRadius: 5,
+                            padding: 10,
+                            color: 'white',
+                        }}
+                        itemStyle={{
+                            padding: 10,
+                            marginTop: 2,
+                            backgroundColor: '#ddd',
+                            borderColor: '#bbb',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                        }}
+                        listProps={
+                            {
+                                persistentScrollbar: true,
+                            }
+                        }
+                        itemTextStyle={{ color: '#222' }}
+                    />
                 </View>
             </Modal>
             

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Modal, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Modal, ScrollView, TouchableOpacity, Picker } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { Input, Button } from 'react-native-elements';
@@ -85,160 +85,164 @@ export default class CourseCreationSreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Modal
-                    visible={this.state.modalVisible}
-                >
+                <Modal visible={this.state.modalVisible}>
+                    <View style={{backgroundColor: '#9ed6ff', flex: 1}}>
+                        <Button
+                            icon={
+                                <MaterialIcon
+                                name="close"
+                                size={15}
+                                color="white"
+                                style = {{paddingRight: 10}}
+                                />
+                            }
+                            title="Tühista"
+                            onPress = { () => { this.toggleModalVisibility(false) }}
+                        />
+                        <SearchableDropdown
+                            items={countriesJson}
+                            onTextChange
+                            onItemSelect={(value) => {
+                                this.setState({country: value.name})
+                                this.toggleModalVisibility(false)
+                            }}
+                            placeholder={'Vali riik...'}
+                            containerStyle={{width: '100%', alignItems: 'center'}}
+                            itemsContainerStyle={{width: '90%'}}
+                            textInputStyle={{
+                                textAlign: 'left', 
+                                width: '90%',
+                                borderWidth: 1,
+                                borderColor: 'black',
+                                borderRadius: 5,
+                                padding: 10
+                            }}
+                            itemStyle={{
+                                padding: 10,
+                                marginTop: 2,
+                                backgroundColor: '#ddd',
+                                borderColor: '#bbb',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                            }}
+                            listProps={
+                                {
+                                    persistentScrollbar: true,
+                                }
+                            }
+                            itemTextStyle={{ color: '#222' }}
+                        />
+                    </View>
+                </Modal>
+
+                <ScrollView style={{width: '100%'}} contentContainerStyle={{width: '85%', alignSelf: 'center', marginTop: 15}}>
+
+                    <Input
+                        label='Raja nimi:'
+                        placeholder='Nimi'
+                        autoCapitalize="sentences"
+                        leftIcon={() => {
+                                return <MaterialIcon name='flag' size={20} color="gray" />;
+                            }}
+                        onChangeText={course => this.setState({ course })}
+                        value={this.state.course}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+                    />
+
+                    <View style={{flexDirection: 'row', width: '97%', paddingBottom: 5, paddingTop: 20, alignSelf: 'flex-end'}}>
+                        <Text style={{textAlignVertical: 'center', textAlign: 'left', fontWeight: 'bold', color: '#ffff', fontSize: 16, flex: 0.5}}>Radu: </Text>
+                    
+                        <Picker
+                            selectedValue={this.state.numberOfBaskets}
+                            style={{height: '100%', alignSelf: 'center', flex: 1}}
+                            onValueChange={(numberOfBaskets) => this.setState({ numberOfBaskets })}
+                        >
+                            <Picker.Item label="Radade arv" value={null} />
+                            {this.state.pickerItems.map((item, index) => {
+                                return (<Picker.Item label={item.label} value={item.value} key={index}/>) 
+                            })}
+                        </Picker>
+                    </View>
+
+                    <Input
+                        label='Asukoht:'
+                        placeholder='Asukoht'
+                        autoCapitalize="sentences"
+                        leftIcon={() => {
+                                return <MaterialIcon name='location-on' size={20} color="gray" />;
+                            }}
+                        onChangeText={location => this.setState({ location })}
+                        value={this.state.location}
+                        containerStyle={{marginTop: 20}}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+                    />
+
+                    <Input
+                        label='Maakond:'
+                        placeholder='Maakond'
+                        autoCapitalize="sentences"
+                        leftIcon={() => {
+                                return <MaterialIcon name='landscape' size={20} color="gray" />;
+                            }}
+                        onChangeText={county => this.setState({ county })}
+                        value={this.state.county}
+                        containerStyle={{marginTop: 20}}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+                    />
+
+                    <TouchableOpacity onPress = { () => { this.toggleModalVisibility(true) }}>
+                        <Input
+                            label='Riik:'
+                            placeholder='Riik'
+                            autoCapitalize="sentences"
+                            disabled={true}
+                            leftIcon={() => {
+                                    return <MaterialIcon name='language' size={20} color="gray" />;
+                                }}
+                            value={this.state.country}
+                            containerStyle={{marginTop: 20}}
+                            inputContainerStyle={styles.inputContainerStyle}
+                            labelStyle={styles.inputLabelStyle}
+                            inputStyle={styles.inputStyle}
+                        />
+                    </TouchableOpacity>
+
                     <Button
                         icon={
                             <MaterialIcon
-                            name="close"
+                            name="add-circle"
                             size={15}
-                            color="white"
+                            color="#4aaff7"
                             style = {{paddingRight: 10}}
                             />
                         }
-                        title="Tühista"
-                        onPress = { () => { this.toggleModalVisibility(false) }}
+                        buttonStyle={styles.button}
+                        containerStyle={{width: '100%', alignItems: 'center', marginTop: 50}}
+                        title="Lisa"
+                        titleStyle={{color: '#4aaff7'}}
+                        onPress = { () => { this.checkInputs() }}
                     />
-                    <SearchableDropdown
-                        items={countriesJson}
-                        onTextChange
-                        onItemSelect={(value) => {
-                            this.setState({country: value.name})
-                            this.toggleModalVisibility(false)
-                        }}
-                        placeholder={'Vali riik...'}
-                        containerStyle={{width: '100%', alignItems: 'center'}}
-                        itemsContainerStyle={{width: '90%'}}
-                        textInputStyle={{
-                            textAlign: 'left', 
-                            width: '90%',
-                            borderWidth: 1,
-                            borderColor: 'black',
-                            borderRadius: 5,
-                            padding: 10
-                        }}
-                        itemStyle={{
-                            padding: 10,
-                            marginTop: 2,
-                            backgroundColor: '#ddd',
-                            borderColor: '#bbb',
-                            borderWidth: 1,
-                            borderRadius: 5,
-                        }}
-                        listProps={
-                            {
-                                persistentScrollbar: true,
-                            }
-                        }
-                        itemTextStyle={{ color: '#222' }}
-                    />
-                </Modal>
-                <ScrollView style={styles.container}>
-                <Input
-                    label='Raja nimi:'
-                    placeholder='Nimi'
-                    autoCapitalize="sentences"
-                    leftIcon={() => {
-                            return <MaterialIcon name='flag' size={20} color="gray" />;
-                        }}
-                    onChangeText={course => this.setState({ course })}
-                    value={this.state.course}
-                    inputContainerStyle={styles.inputContainerStyle}
-                />
-                <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20}}>
-                    <Text style={{fontSize: 20, textAlignVertical: "center"}}>Korve: </Text>
-                    <RNPickerSelect
-                        onValueChange={(numberOfBaskets) => this.setState({ numberOfBaskets })}
-                        placeholder={{label: 'Korvide arv', value: null}}
-                        items={this.state.pickerItems}
-                        style={{
-                            ...pickerSelectStyles,
-                            iconContainer: {
-                                top: 15,
-                                right: 10,
-                            },
-                            placeholder: {
-                                color: 'black',
-                                fontSize: 12,
-                                fontWeight: 'bold',
-                            },
-                        }}
-                        useNativeAndroidPickerStyle = {false}
-                        Icon={() => {
-                            return <MaterialIcon name='expand-more' size={15} color="gray" />;
-                        }}
-                    />
-                </View>
+                </ScrollView>
 
-                <Input
-                    label='Asukoht:'
-                    placeholder='Asukoht'
-                    autoCapitalize="sentences"
-                    leftIcon={() => {
-                            return <MaterialIcon name='location-on' size={20} color="gray" />;
-                        }}
-                    onChangeText={location => this.setState({ location })}
-                    value={this.state.location}
-                    inputContainerStyle={styles.inputContainerStyle}
-                    containerStyle={{marginTop: 20}}
-                />
-
-                <Input
-                    label='Maakond:'
-                    placeholder='Maakond'
-                    autoCapitalize="sentences"
-                    leftIcon={() => {
-                            return <MaterialIcon name='landscape' size={20} color="gray" />;
-                        }}
-                    onChangeText={county => this.setState({ county })}
-                    value={this.state.county}
-                    inputContainerStyle={styles.inputContainerStyle}
-                    containerStyle={{marginTop: 20}}
-                />
-                <TouchableOpacity onPress = { () => { this.toggleModalVisibility(true) }}>
-                <Input
-                    label='Riik:'
-                    placeholder='Riik'
-                    autoCapitalize="sentences"
-                    disabled={true}
-                    leftIcon={() => {
-                            return <MaterialIcon name='language' size={20} color="gray" />;
-                        }}
-                    value={this.state.country}
-                    inputContainerStyle={styles.inputContainerStyle}
-                    containerStyle={{marginTop: 20}}
-                />
-                </TouchableOpacity>
-
-                <Button
-                    icon={
-                        <MaterialIcon
-                        name="add-circle"
-                        size={15}
-                        color="white"
-                        style = {{paddingRight: 10}}
-                        />
-                    }
-                    buttonStyle={styles.button}
-                    containerStyle={{width: '100%', alignItems: 'center', marginTop: 50}}
-                    title="Lisa"
-                    onPress = { () => { this.checkInputs() }}
-                />
-            </ScrollView>
-            <Snackbar
-                visible={this.state.visible}
-                onDismiss={() => this.setState({ visible: false })}
-                duration={this.state.snackDuration}
-                action={{
-                    label: 'Close',
-                    onPress: () => {
-                        this.setState({ visible: false })
-                    },
-                }}
-                >
-                {this.state.snackText}
-            </Snackbar>
+                <Snackbar
+                    visible={this.state.visible}
+                    onDismiss={() => this.setState({ visible: false })}
+                    duration={this.state.snackDuration}
+                    action={{
+                        label: 'Close',
+                        onPress: () => {
+                            this.setState({ visible: false })
+                        },
+                    }}
+                    >
+                    {this.state.snackText}
+                </Snackbar>
             </View>
         );
     }
@@ -247,40 +251,25 @@ export default class CourseCreationSreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+		backgroundColor: '#9ed6ff'
     },
     button: {
-        marginTop: 8,
-        padding: 8,
-        backgroundColor: '#4293f5',
-        borderRadius: 8,
-        width: '40%'
+        marginTop: 12,
+        padding: 12,
+        backgroundColor: '#ffff',
+        borderRadius: 20,
+        width: '95%'
     },
     inputContainerStyle: {
-        borderWidth: 2, 
-        borderColor: 'gray', 
-        borderRadius: 10,
+        borderBottomWidth: 0,
+        backgroundColor: '#4aaff7',
+        borderRadius: 8,
+    },
+    inputLabelStyle: {
+        color: '#ffff', 
+        marginBottom: 5,
+    },
+    inputStyle: {
+        color: '#ffff'
     },
 })
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-        color: 'black',
-        paddingRight: 30,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'black',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30,
-    },
-});
