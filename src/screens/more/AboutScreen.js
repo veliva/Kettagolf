@@ -6,8 +6,8 @@ export default class AboutScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style = {{flex: 1}}>
-                    <Text>Antud rakendus on tehtud Tallinna Ülikooli üliõpilase Veli Vaiguri poolt bakalaureusetööna.</Text>
+                <View style = {{flex: 1, width: '90%', marginTop: 30, alignItems: 'center',}}>
+                    <Text style={{fontSize: 17, fontWeight: 'bold', textAlign: 'center'}}>Antud rakendus on tehtud Tallinna Ülikooli üliõpilase Veli Vaiguri poolt bakalaureusetööna.</Text>
                 </View>
             </View>
         );
@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
+        backgroundColor: '#9ed6ff'
     },
     button: {
         marginTop: 8,

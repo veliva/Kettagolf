@@ -24,16 +24,20 @@ export default class TrainingMarkingScreen extends React.Component {
         };
 
         this.selected = {
-            backgroundColor: '#b4f9fe',
+            // backgroundColor: '#b4f9fe',
+            backgroundColor: '#ced4db',
+            borderWidth: 3,
+            borderColor: 'yellow'
         }
 
         this.unselected = {
-            backgroundColor: '#e9f0f8',
+            backgroundColor: '#ced4db',
+            borderWidth: 3,
+            borderColor: 'transparent'
         }
     }
 
     async componentDidMount() {
-        console.log('---------------------------------')
         await this.setState({
             course: this.props.navigation.state.params.course,
             players: this.props.navigation.state.params.players,
@@ -232,8 +236,8 @@ export default class TrainingMarkingScreen extends React.Component {
             }
             return (
                 <View style = {styles.row}>
-                    <Text style={{flex: 1, textAlign: 'left', textAlignVertical: 'center', marginLeft: 3}}>{item.fullName}</Text>
-                    <Text style={[test, {flex: 0.3, textAlign: 'center', textAlignVertical: 'center'}]}>OB</Text>
+                    <Text style={{flex: 1, textAlign: 'left', textAlignVertical: 'center', marginLeft: 5, fontWeight: 'bold'}}>{item.fullName}</Text>
+                    <Text style={[test, {flex: 0.3, textAlign: 'center', textAlignVertical: 'center', fontWeight: 'bold'}]}>OB</Text>
                     <TouchableOpacity
                         style={{flex: 0.3, width: '100%'}} 
                         onPress={() => { 
@@ -245,7 +249,7 @@ export default class TrainingMarkingScreen extends React.Component {
                         }}
                     >
                         <TextInput
-                            style={{color: 'black', backgroundColor: '#e9f0f8', textAlign: 'center', flex: 1}}
+                            style={{color: 'black', backgroundColor: '#ced4db', textAlign: 'center', flex: 1, fontWeight: 'bold', fontSize: 15, borderRadius: 5, borderWidth: 3, borderColor: 'transparent'}}
                             showSoftInputOnFocus={false}
                             caretHidden={false}
                             pointerEvents="none"
@@ -263,20 +267,33 @@ export default class TrainingMarkingScreen extends React.Component {
         }
     }
 
+    renderHeader = () => {
+        return(
+            <View style={styles.tableHeader}>
+                <Text style={{flex: 1, marginLeft: 3, width: '100%', fontWeight: 'bold'}}>Mängija</Text>
+                <Text style={{flex: 0.3, width: '100%'}}></Text>
+                <Text style={{flex: 0.3, width: '100%'}}></Text>
+                <Text style={{flex: 0.3, width: '100%', textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold'}}>+/-</Text>
+                <Text style={{flex: 0.3, width: '100%', textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold'}}>Sum</Text>
+            </View>
+        )
+    }
+
     render() {
         return(
             <View style={styles.container}>
 
                 <View style={styles.headerContainer}>
-                    <Text>{this.state.course}</Text>
-                    <Text>Korv {this.state.tracks[this.state.focusedTrack].label}</Text>
-                    <Text>Par {this.state.tracks[this.state.focusedTrack].par}</Text>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.course}</Text>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Rada {this.state.tracks[this.state.focusedTrack].label}</Text>
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>Par {this.state.tracks[this.state.focusedTrack].par}</Text>
                 </View>
 
                 <FlatList
                     style = {styles.FlatList}
                     data={this.state.players}
                     renderItem={this.renderItem}
+                    ListHeaderComponent={this.renderHeader}
                     keyExtractor={(item, index) => index.toString()}
                 />
 
@@ -407,6 +424,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+        backgroundColor: '#9ed6ff'
     },
     FlatList: {
         width: '95%',
@@ -419,9 +437,10 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: 'gray',
         borderRadius: 5,
+        backgroundColor: '#7dc6fa',
+        marginBottom: 5,
+        padding: 1
     },
     keyboardContainer: {
         flex: 0.4,
@@ -431,7 +450,6 @@ const styles = StyleSheet.create({
     },
     keyboard: {
         width: '95%',
-        // backgroundColor: 'red',
         flex: 1,
         alignSelf: 'center',
         flexDirection: 'row'
@@ -456,9 +474,13 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         flex: 0.2,
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingTop: 5
     },
-    test2: {
-        backgroundColor: 'purple'
+    tableHeader: {
+        flexDirection: 'row',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        marginBottom: 5
     }
 })

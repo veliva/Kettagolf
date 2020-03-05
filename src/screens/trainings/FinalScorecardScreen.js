@@ -101,6 +101,14 @@ export default class TrainingMarkingScreen extends React.Component {
     }
 
     async imageFromFirebaseStorage(userID) {
+        if(userID.substring(0, 5) === 'temp ') {
+            const user = {uid: userID, uri: 'https://firebasestorage.googleapis.com/v0/b/kettagolf-d21a1.appspot.com/o/profilePictures%2FtempAvatar.png?alt=media&token=ff8626a0-9b86-4971-b5df-a831c2e91b88'}
+            this.setState({
+                images: [...this.state.images, user],
+                databaseDone: true
+            })
+            return
+        }
 		const imageRef = firebase.storage().ref('profilePictures').child(userID);
 		await imageRef.getDownloadURL().then(result => {
             const user = {uid: userID, uri: result}
@@ -206,7 +214,7 @@ export default class TrainingMarkingScreen extends React.Component {
 
     render() {
         return(
-            <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+            <ScrollView style={{backgroundColor: '#9ed6ff'}} contentContainerStyle={{alignItems: 'center', backgroundColor: '#9ed6ff',}}>
                 <View style={styles.container}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.courseNameText}>{this.state.course}</Text>
@@ -236,7 +244,9 @@ export default class TrainingMarkingScreen extends React.Component {
                             <View>
                                 <Button
                                     title='Lõpeta treening'
-                                    containerStyle={{alignSelf: 'center', width: '60%'}}
+                                    titleStyle={{color: '#4aaff7'}}
+                                    buttonStyle={styles.button}
+                                    containerStyle={{alignSelf: 'center', width: '100%', alignItems: 'center'}}
                                     onPress={() => this.finishTraining()}
                                 />
                             </View>
@@ -252,9 +262,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '95%',
+        backgroundColor: '#9ed6ff',
     },
     standingsTable: {
-        marginBottom: 30,
+        marginBottom: 20,
     },
     tableContainer: {
         // flex: 0
@@ -284,5 +295,10 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderBottomWidth: 1,
         borderBottomColor: 'black'
+    },
+    button: {
+        backgroundColor: '#ffff',
+        borderRadius: 20,
+        width: '90%'
     },
 })

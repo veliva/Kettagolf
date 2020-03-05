@@ -101,7 +101,7 @@ export default class Scorecard extends React.Component {
 
     renderHeader(item) {
         return (
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#d9d9d9'}}>
+            <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#38a6f5'}}>
                 <View style={{flex: 5, flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center'}}>
                     <Text style={{marginRight: 10, fontSize: 12}}>Korv</Text>
                     <Text style={{marginRight: 10, fontSize: 12}}>Par</Text>
@@ -211,10 +211,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: 15,
+        marginRight: 1
     },
     FlatList: {
-        borderWidth: 1,
-        borderColor: 'black',
+        backgroundColor: '#b3dfff',
         borderRadius: 5,
         paddingBottom: 5,
         marginBottom: 20,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     headerItemView: {
         flex: 1, 
         borderWidth: 2, 
-        borderColor: 'transparent'
+        borderColor: 'transparent',
     },
 })
 

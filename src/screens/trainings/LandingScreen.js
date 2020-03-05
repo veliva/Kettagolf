@@ -208,30 +208,33 @@ export default class LandingScreen extends React.Component {
                             />
                         }
                         inputContainerStyle={styles.inputContainerStyle}
+                        labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
                         onChangeText={course => this.setState({ course })}
                         value={this.state.course}
                     />
                     <Button
                         title='Alusta treeningut'
-                        containerStyle={{marginTop: 5}}
-                        buttonStyle={{borderRadius: 8}}
+                        titleStyle={{color: '#4aaff7'}}
+                        containerStyle={{width: '60%' ,marginTop: 5, alignItems: 'center'}}
+                        buttonStyle={styles.button}
                         onPress = {() => this.getCourseDataFromFirestore()}
                     />
 
                     <View style={{width: '95%', marginTop: 10}}>
-                        <Text style={{textAlign: 'left', fontWeight: 'bold', fontSize: 15}}>Alusta treeningut: </Text>
+                        <Text style={{textAlign: 'left', fontWeight: 'bold', fontSize: 15, color: '#ffff'}}>Alusta treeningut: </Text>
 
                         <FlatList
                             data={this.state.coursesArr}
                             renderItem={this.renderItemSuggested}
                             keyExtractor={(item, index) => index.toString()}
-                            style={{marginBottom: 30}}
+                            style={{marginBottom: 10}}
                         />
                     </View>
                 </View>
                 
                 <View style = {styles.trainingsContainer}>
-                    <Text style={{fontWeight: 'bold', fontSize: 20, marginBottom: 5}}>Minu treeningud:</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 20, marginBottom: 5, color: '#ffff'}}>Minu treeningud:</Text>
 
                     <FlatList
                         data={this.state.trainings}
@@ -249,18 +252,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: '#9ed6ff',
     },
     FlatList: {
-        borderWidth: 2,
-        borderColor: 'gray',
+        backgroundColor: '#b3dfff',
     },
     row: {
         flex: 1,
         flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: 'gray',
         borderRadius: 5,
         margin: 2,
+        backgroundColor: '#7dc6fa'
     },
     trainingsContainer: {
         flex: 1,
@@ -269,20 +271,32 @@ const styles = StyleSheet.create({
     createTrainingContainer: {
         width: '95%', 
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'gray',
         borderRadius: 5,
         marginTop: 5,
-        marginBottom: 30,
+        marginBottom: 20,
     },
     inputContainerStyle: {
-        borderWidth: 2, 
-        borderColor: 'gray', 
-        borderRadius: 10,
+        borderBottomWidth: 0,
+        backgroundColor: '#4aaff7',
+        borderRadius: 8,
+    },
+    inputLabelStyle: {
+        color: '#ffff', 
+        marginBottom: 5,
+    },
+    inputStyle: {
+        color: '#ffff'
     },
     suggestedRow: {
-        backgroundColor: '#cfcfcf',
+        backgroundColor: '#d4d4d4',
         marginTop: 4,
         borderRadius: 5,
+    },
+    button: {
+        marginTop: 5,
+        padding: 10,
+        backgroundColor: '#ffff',
+        borderRadius: 20,
+        width: '95%'
     },
   })

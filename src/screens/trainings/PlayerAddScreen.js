@@ -90,6 +90,38 @@ export default class TrainingCreationSreen extends React.Component {
 		});
     }
 
+    async addTempPlayer() {
+        await this.setState({
+            player: {
+                uid: 'temp ' + this.state.playerName,
+                fullName: this.state.playerName,
+                imageURI: 'https://firebasestorage.googleapis.com/v0/b/kettagolf-d21a1.appspot.com/o/profilePictures%2FtempAvatar.png?alt=media&token=ff8626a0-9b86-4971-b5df-a831c2e91b88'
+            }
+        })
+
+        if(this.state.players.some(player => player.uid === this.state.player.uid)){
+            this.setState({ player: null })
+            Alert.alert(
+                'Mängija juba olemas',
+                'Sellise nimega ajutine mängija on juba lisatud.',
+                [
+                    {text: '', },
+                    {
+                      text: '',
+                    },
+                    {text: 'Ok', },
+                ],
+                  {cancelable: false},
+            )
+        } else {
+            await this.setState({
+                players: [...this.state.players, this.state.player],
+                playerIDs: [...this.state.playerIDs, this.state.player.uid],
+                player: null
+            });
+        }
+    }
+
     searchUserByName = () => {
         if(this.state.playerName === null || this.state.playerName === '') {
             return
@@ -99,13 +131,13 @@ export default class TrainingCreationSreen extends React.Component {
             if(snapshot._docs.length === 0) {
                 Alert.alert(
                     'Tundmatu nimi',
-                    'Sellise nimega mängijat pole andmebaasis.',
+                    'Sellise nimega mängijat pole andmebaasis. Kas soovid sisestatud nimega ajutise mängija ikkagi lisada?',
                     [
-                      {text: '', },
+                      {text: 'Ei', },
                       {
                         text: '',
                       },
-                      {text: 'OK', },
+                      {text: 'Jah', onPress: () => { this.addTempPlayer() }},
                     ],
                     {cancelable: false},
                 );
@@ -142,7 +174,7 @@ export default class TrainingCreationSreen extends React.Component {
 
                 <Button
                     containerStyle={{justifyContent: 'center'}}
-                    buttonStyle={{backgroundColor: 'gray'}}
+                    buttonStyle={{backgroundColor: '#c9e8ff'}}
                     icon={
                         <MaterialIcon
                         name="close"
@@ -184,22 +216,26 @@ export default class TrainingCreationSreen extends React.Component {
                             placeholder='Mängija nimi'
                             containerStyle={{flex: 0.6, justifyContent: 'center'}}
                             autoCapitalize='words'
-                            inputContainerStyle={styles.inputContainerStyle}
                             onChangeText={playerName => this.setState({ playerName })}
                             value={this.state.playerName}
                             onSubmitEditing={() => { this.searchUserByName() }}
+                            inputContainerStyle={styles.inputContainerStyle}
+                            labelStyle={styles.inputLabelStyle}
+                            inputStyle={styles.inputStyle}
                         />
                         <Button
                             title='Lisa mängija'
+                            titleStyle={{color: '#4aaff7'}}
                             icon={
                                 <MaterialIcon
                                 name="person-add"
                                 size={15}
-                                color="white"
+                                color="#4aaff7"
                                 style = {{paddingRight: 10}}
                                 />
                             }
-                            containerStyle={{flex: 0.4, justifyContent: 'center'}}
+                            containerStyle={{flex: 0.4}}
+                            buttonStyle={styles.button}
                             onPress = { () => { this.searchUserByName() }}
                         />
                     </View>
@@ -209,6 +245,7 @@ export default class TrainingCreationSreen extends React.Component {
                             title='Lisa mind'
                             containerStyle={{flex: 1, marginRight: 2, justifyContent: 'center'}}
                             disabled={this.state.itselfAdded}
+                            buttonStyle={{borderRadius: 20}}
                             onPress={() => { 
                                 this.setState({itselfAdded: true})
                                 this.addPlayer(this.state.itselfUID)
@@ -218,6 +255,7 @@ export default class TrainingCreationSreen extends React.Component {
                             title='Eemalda mind'
                             containerStyle={{flex: 1, justifyContent: 'center'}}
                             disabled={!this.state.itselfAdded}
+                            buttonStyle={{borderRadius: 20}}
                             onPress={() => {
                                 this.setState({itselfAdded: false})
                                 this.removePlayer(this.state.itselfUID)
@@ -241,12 +279,14 @@ export default class TrainingCreationSreen extends React.Component {
                 <View style={styles.bottomContainer}>
                     <Button
                         title='Alusta'
-                        containerStyle={{width: '30%'}}
+                        titleStyle={{color: '#4aaff7'}}
+                        containerStyle={{width: '90%', alignItems: 'center'}}
+                        buttonStyle={styles.button}
                         icon={
                             <MaterialIcon
                                 name="check"
                                 size={20}
-                                color="white"
+                                color="#4aaff7"
                                 style = {{paddingRight: 10}}
                             />
                         }
@@ -270,11 +310,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+        backgroundColor: '#9ed6ff',
     },
     inputContainerStyle: {
-        borderWidth: 2, 
-        borderColor: 'gray', 
-        borderRadius: 10,
+        borderBottomWidth: 0,
+        backgroundColor: '#4aaff7',
+        borderRadius: 8,
+    },
+    inputLabelStyle: {
+        color: '#ffff', 
+        marginBottom: 5,
+    },
+    inputStyle: {
+        color: '#ffff'
     },
     courseContainer: {
         flex: 0.2,
@@ -283,17 +331,15 @@ const styles = StyleSheet.create({
     },
     tableContainer: {
         flex: 0.5,
-        borderWidth: 1,
-        borderColor: '#e8e8e8',
-        borderRadius: 10,
-        width: '95%',
+        width: '90%',
         alignSelf: 'center'
     },
     buttonsContainer: {
         flex: 0.2,
         flexDirection: 'column',
-        width: '95%',
-        alignSelf: 'center'
+        width: '100%',
+        alignSelf: 'center',
+        alignItems: 'center'
     },
     courseText: {
         fontWeight: 'bold',
@@ -301,18 +347,19 @@ const styles = StyleSheet.create({
     },
     buttonsRow: {
         flexDirection: 'row', 
-        width: '100%',
-        flex: 1
+        width: '90%',
+        flex: 1,
     },
     FlatList: {
         width: '100%',
+        backgroundColor: '#b3dfff',
+        borderRadius: 5
     },
     row: {
         flexDirection: 'row',
         width: '100%',
         alignSelf: 'flex-start',
-        borderWidth: 1,
-        borderColor: '#dbdbdb',
+        backgroundColor: '#4aaff7',
         borderRadius: 10,
         marginBottom: 2,
         padding: 3
@@ -325,6 +372,13 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         flex: 0.1,
-        alignItems: 'center'
-    }
+        alignItems: 'center',
+    },
+    button: {
+        marginTop: 12,
+        padding: 12,
+        backgroundColor: '#ffff',
+        borderRadius: 20,
+        width: '95%'
+    },
 })

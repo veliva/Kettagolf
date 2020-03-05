@@ -121,8 +121,8 @@ export default class CourseCreationBasketSreen extends React.Component {
 
                     <View style={styles.courseNameHeader}>
                         <Text style={styles.courseNameHeaderText}>{this.state.course}</Text>
-                        <Text style={styles.test}>{this.state.location}, {this.state.county}</Text>
-                        <Text style={styles.test}>{this.state.country}</Text>
+                        <Text style={styles.location}>{this.state.location}, {this.state.county}</Text>
+                        <Text style={styles.location}>{this.state.country}</Text>
                     </View>
 
                     <FlatList
@@ -223,8 +223,6 @@ const styles = StyleSheet.create({
         width: '85%',
         marginTop: 25,
         marginBottom: 30,
-        // borderBottomWidth: 1,
-        // borderBottomColor: 'black',
         flex: 0.6,
         backgroundColor: '#b3dfff',
         borderRadius: 5
@@ -277,7 +275,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 35
     },
-    test: {
+    location: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 15
