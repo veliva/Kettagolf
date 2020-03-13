@@ -197,8 +197,8 @@ export default class LandingScreen extends React.Component {
             <KeyboardAvoidingView style={styles.container} behavior='height' enabled>
                 <View style = {styles.createTrainingContainer}>
                     <Input
-                        label='Rada:'
-                        placeholder="Rada"
+                        label='Pargi nimi:'
+                        placeholder="Pargi nimi"
                         autoCapitalize="sentences"
                         leftIcon={
                             <MaterialCommunityIcon

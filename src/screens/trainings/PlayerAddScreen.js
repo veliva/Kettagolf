@@ -165,7 +165,7 @@ export default class TrainingCreationSreen extends React.Component {
                     source={{
                       uri: item.imageURI,
                     }}
-                    containerStyle={{height: 85, width: 85}}
+                    containerStyle={{height: 80, width: 80}}
                 />
 
                 <View style={styles.rowName}>
@@ -178,7 +178,7 @@ export default class TrainingCreationSreen extends React.Component {
                     icon={
                         <MaterialIcon
                         name="close"
-                        size={25}
+                        size={20}
                         color="red"
                         />
                     }
@@ -282,14 +282,6 @@ export default class TrainingCreationSreen extends React.Component {
                         titleStyle={{color: '#4aaff7'}}
                         containerStyle={{width: '90%', alignItems: 'center'}}
                         buttonStyle={styles.button}
-                        icon={
-                            <MaterialIcon
-                                name="check"
-                                size={20}
-                                color="#4aaff7"
-                                style = {{paddingRight: 10}}
-                            />
-                        }
                         onPress={() => {
                             this.props.navigation.navigate('TrainingMarking', {
                                 course: this.state.course,

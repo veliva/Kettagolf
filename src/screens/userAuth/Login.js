@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { firebase } from '@react-native-firebase/auth';
+import { Snackbar } from 'react-native-paper';
 import { Input, Button } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -8,6 +9,9 @@ export default class Login extends React.Component {
     state = { 
         email: '', 
         password: '',
+        visible: false,
+        snackText: '',
+        snackDuration: 3000,
     }  
   
     handleLogin = () => {
@@ -15,17 +19,13 @@ export default class Login extends React.Component {
         const { email, password } = this.state
 
         if(email === '') {
-            Alert.alert(
-                'Email',
-                'Palun sisesta email.',
-            )
+            this.setState({snackText: 'Palun sisesta email!'})
+            this.setState({ visible: true })
             return
         }
         if(password === '') {
-            Alert.alert(
-                'Parool',
-                'Palun sisesta parool.',
-            )
+            this.setState({snackText: 'Palun sisesta parool!'})
+            this.setState({ visible: true })
             return
         }
         
@@ -97,6 +97,20 @@ export default class Login extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <Snackbar
+                    visible={this.state.visible}
+                    onDismiss={() => this.setState({ visible: false })}
+                    duration={this.state.snackDuration}
+                    action={{
+                        label: 'Close',
+                        onPress: () => {
+                            this.setState({ visible: false })
+                        },
+                    }}
+                    >
+                    {this.state.snackText}
+                </Snackbar>
             </View>
         )
     }

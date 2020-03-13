@@ -53,7 +53,7 @@ const TabNavigator = createBottomTabNavigator(
 		}
 	},
 	{
-		initialRouteName: 'Profile',
+		initialRouteName: 'Trainings',
 		tabBarOptions: {
 			initialRouteName: 'Profile',
 			activeTintColor: '#000000',

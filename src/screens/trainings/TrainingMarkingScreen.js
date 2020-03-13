@@ -24,7 +24,6 @@ export default class TrainingMarkingScreen extends React.Component {
         };
 
         this.selected = {
-            // backgroundColor: '#b4f9fe',
             backgroundColor: '#ced4db',
             borderWidth: 3,
             borderColor: 'yellow'
@@ -260,8 +259,8 @@ export default class TrainingMarkingScreen extends React.Component {
                             value={this.state.results[index].playerResults[this.state.focusedTrack].result}
                         />
                     </TouchableOpacity>
-                    <Text style={{flex: 0.3, textAlignVertical: 'center', textAlign: 'center'}}>{this.state.results[index].sum}</Text>
                     <Text style={{flex: 0.3, textAlignVertical: 'center', textAlign: 'center'}}>{this.state.results[index].diff}</Text>
+                    <Text style={{flex: 0.3, textAlignVertical: 'center', textAlign: 'center'}}>{this.state.results[index].sum}</Text>
                 </View>
             )
         }

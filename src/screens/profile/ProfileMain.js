@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Image, Text, View } from 'react-native'
 import ImagePicker from 'react-native-image-picker';
 import { Avatar, Input } from 'react-native-elements';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -84,7 +84,10 @@ export default class Main extends React.Component {
 
 	chooseFile = () => {
         let options = {
-			title: 'Select Image',
+			title: 'Vali profiilipilt',
+			takePhotoButtonTitle: 'Tee pilt kaameraga...',
+			chooseFromLibraryButtonTitle: 'Vali pilt galeriist...',
+			cancelButtonTitle: 'Tühista',
 			quality: 0.3,
 			storageOptions: {
 				skipBackup: true,
@@ -133,6 +136,10 @@ export default class Main extends React.Component {
 						label='Email'
 						disabled={true}
 						value={this.state.email}
+						leftIcon={() => {
+                            return <MaterialCommunityIcon name='email' size={20} color="black" />;
+						}}
+						leftIconContainerStyle={{marginLeft: 0}}
 						containerStyle={styles.inputContainerStyle}
 						labelStyle={styles.inputLabelStyle}
                         inputStyle={styles.inputStyle}
@@ -142,6 +149,10 @@ export default class Main extends React.Component {
 						label='Sugu'
 						disabled={true}
 						value={this.state.gender}
+						leftIcon={() => {
+                            return <MaterialCommunityIcon name='gender-male-female' size={20} color="black" />;
+						}}
+						leftIconContainerStyle={{marginLeft: 0}}
 						containerStyle={styles.inputContainerStyle}
 						labelStyle={styles.inputLabelStyle}
                         inputStyle={styles.inputStyle}
@@ -151,6 +162,10 @@ export default class Main extends React.Component {
 						label='Sünniaasta'
 						disabled={true}
 						value={this.state.birthYear}
+						leftIcon={() => {
+                            return <MaterialCommunityIcon name='calendar-month' size={20} color="black" />;
+						}}
+						leftIconContainerStyle={{marginLeft: 0}}
 						containerStyle={styles.inputContainerStyle}
 						labelStyle={styles.inputLabelStyle}
                         inputStyle={styles.inputStyle}
@@ -160,6 +175,10 @@ export default class Main extends React.Component {
 						label='PDGA#'
 						disabled={true}
 						value={this.state.pdgaNumber}
+						leftIcon={() => {
+                            return <MaterialCommunityIcon name='disc' size={20} color="black" />;
+						}}
+						leftIconContainerStyle={{marginLeft: 0}}
 						containerStyle={styles.inputContainerStyle}
 						labelStyle={styles.inputLabelStyle}
                         inputStyle={styles.inputStyle}

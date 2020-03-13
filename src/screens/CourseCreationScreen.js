@@ -47,12 +47,12 @@ export default class CourseCreationSreen extends React.Component {
 
     checkInputs = () => {
         if(this.state.course === null || this.state.course === '') {
-            this.setState({snackText: 'Palun sisesta raja nimi!'})
+            this.setState({snackText: 'Palun sisesta pargi nimi!'})
             this.setState({ visible: true })
             return
         }
         if(this.state.numberOfBaskets === null) {
-            this.setState({snackText: 'Palun vali korvide arv!'})
+            this.setState({snackText: 'Palun vali radade arv!'})
             this.setState({ visible: true })
             return
         }
@@ -138,7 +138,7 @@ export default class CourseCreationSreen extends React.Component {
                 <ScrollView style={{width: '100%'}} contentContainerStyle={{width: '85%', alignSelf: 'center', marginTop: 15}}>
 
                     <Input
-                        label='Raja nimi:'
+                        label='Pargi nimi:'
                         placeholder='Nimi'
                         autoCapitalize="sentences"
                         leftIcon={() => {
