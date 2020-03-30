@@ -22,7 +22,7 @@ export default class LandingScreen extends React.Component {
     componentDidMount() {
         console.log('didMount')
 
-        this.props.navigation.addListener(
+        this.navFocusListener = this.props.navigation.addListener(
             'didFocus',
             param => {
                 console.log('didFocus Landing')
@@ -31,6 +31,10 @@ export default class LandingScreen extends React.Component {
         );
 
         // this.getTrainingsFromFirestore()
+    }
+
+    componentWillUnmount() {
+        this.navFocusListener.remove()
     }
 
     async getTrainingsFromFirestore() {
@@ -78,8 +82,8 @@ export default class LandingScreen extends React.Component {
 		.then(snapshot => {
             if(snapshot._docs.length === 0) {
                 Alert.alert(
-                    'Tundmatu rada',
-                    'Sellise nimega rada pole andmebaasis. Kas soovid selle lisada?',
+                    'Tundmatu nimega park',
+                    'Sellise nimega parki pole andmebaasis. Kas soovid selle lisada?',
                     [
                         {text: 'Ei', onPress: () => console.log('Ei vajutatud')},
                         {
@@ -185,8 +189,11 @@ export default class LandingScreen extends React.Component {
     renderItemSuggested = ({item, index}) => {
         return(
             <View style={styles.suggestedRow}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('PlayerAdd', {course: item})}>
-                    <Text style={{fontSize: 20, textAlignVertical: 'center', marginLeft: 5}}>{item}</Text>
+                <TouchableOpacity 
+                    onPress={() => 
+                        this.props.navigation.navigate('PlayerAdd', {course: item})
+                    }>
+                    <Text style={styles.suggestedItemText}>{item}</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -273,7 +280,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 5,
         marginTop: 5,
-        marginBottom: 20,
+        marginBottom: 0,
     },
     inputContainerStyle: {
         borderBottomWidth: 0,
@@ -298,5 +305,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffff',
         borderRadius: 20,
         width: '95%'
+    },
+    suggestedItemText: {
+        fontSize: 20, 
+        textAlignVertical: 'center', 
+        marginLeft: 5
     },
   })

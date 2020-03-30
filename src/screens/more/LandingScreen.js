@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, ScrollView, Linking, Alert } from 'react-native
 import { Button } from 'react-native-elements'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Octicon from 'react-native-vector-icons/Octicons';
 
 import { firebase } from '@react-native-firebase/auth';
 
@@ -43,6 +44,20 @@ export default class MoreMain extends React.Component {
                     <View style={styles.tableContainer}>
                         <View style={styles.tableElement}>
                             <Text style={styles.tableElementHeader}>Seaded</Text>
+                                <Button
+                                    icon={
+                                        <MaterialCommunityIcon
+                                        name="account-card-details"
+                                        size={15}
+                                        color="black"
+                                        style = {{paddingRight: 10}}
+                                        />
+                                    }
+                                    title='Muuda andmeid'
+                                    buttonStyle={styles.button}
+                                    titleStyle={styles.buttonTitleStyle}
+                                    onPress={() => {this.props.navigation.navigate('EditData')}}
+                                />
                                 <Button
                                     icon={
                                         <MaterialCommunityIcon
@@ -88,6 +103,20 @@ export default class MoreMain extends React.Component {
                                 buttonStyle={styles.button}
                                 titleStyle={styles.buttonTitleStyle}
                                 onPress={ ()=>{ Linking.openURL('https://github.com/veliva/Kettagolf')}}
+                            />
+                            <Button
+                                icon={
+                                    <Octicon
+                                    name="law"
+                                    size={15}
+                                    color="black"
+                                    style = {{paddingRight: 10}}
+                                    />
+                                }
+                                title='Kettagolfi ametlikud reeglid'
+                                buttonStyle={styles.button}
+                                titleStyle={styles.buttonTitleStyle}
+                                onPress={ ()=>{ Linking.openURL('http://discgolfiliit.ee/wp-content/uploads/2019/05/190116_discgolf_reegliraamat_a6_105x148_bleed3.pdf')}}
                             />
                         </View>
 

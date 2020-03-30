@@ -92,7 +92,7 @@ export default class CoursesMain extends React.Component {
         } else {
             return (
                 <View style={styles.container}>
-                    <Text>Erinevad rajad kaardi peal</Text>
+                    <Text>Erinevad pargid kaardi peal</Text>
                     <MapView style={styles.map}
                         initialRegion={{
                         latitude: 58.388540,
@@ -100,7 +100,6 @@ export default class CoursesMain extends React.Component {
                         latitudeDelta: 4,
                         longitudeDelta: 1,
                         }}
-                        
                     >
                         {this.state.sortedCourseLocations.map((marker, index) => (
                             <Marker

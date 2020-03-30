@@ -21,7 +21,7 @@ export default class SignUp extends React.Component {
             fullName: '',
             gender: 'Mees',
             birthYear: '',
-            country: '',
+            country: 'Estonia',
             pdgaNumber: null,
             errorMessage: null,
             modalVisible: false,
@@ -127,23 +127,8 @@ export default class SignUp extends React.Component {
                         placeholderTextColor={'white'}
                         containerStyle={{width: '100%', alignItems: 'center'}}
                         itemsContainerStyle={{width: '90%'}}
-                        textInputStyle={{
-                            textAlign: 'left', 
-                            width: '90%',
-                            borderWidth: 1,
-                            borderColor: 'white',
-                            borderRadius: 5,
-                            padding: 10,
-                            color: 'white',
-                        }}
-                        itemStyle={{
-                            padding: 10,
-                            marginTop: 2,
-                            backgroundColor: '#ddd',
-                            borderColor: '#bbb',
-                            borderWidth: 1,
-                            borderRadius: 5,
-                        }}
+                        textInputStyle={styles.dropdownTextInput}
+                        itemStyle={styles.dropdownItem}
                         listProps={
                             {
                                 persistentScrollbar: true,
@@ -373,4 +358,21 @@ const styles = StyleSheet.create({
     inputStyle: {
         color: '#ffff'
     },
+    dropdownTextInput: {
+        textAlign: 'left', 
+        width: '90%',
+        borderWidth: 1,
+        borderColor: 'white',
+        borderRadius: 5,
+        padding: 10,
+        color: 'white',
+    },
+    dropdownItem: {
+        padding: 10,
+        marginTop: 2,
+        backgroundColor: '#ddd',
+        borderColor: '#bbb',
+        borderWidth: 1,
+        borderRadius: 5,
+    }
 })

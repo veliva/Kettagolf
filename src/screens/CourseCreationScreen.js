@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Modal, ScrollView, TouchableOpacity, Picker } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { Input, Button } from 'react-native-elements';
 import { Snackbar } from 'react-native-paper';
@@ -17,7 +16,7 @@ export default class CourseCreationSreen extends React.Component {
             numberOfBaskets: null,
             location: null,
             county: null,
-            country: null,
+            country: 'Estonia',
             pickerItems: [],
             visible: false,
             snackText: '',

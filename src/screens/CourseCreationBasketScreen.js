@@ -103,6 +103,41 @@ export default class CourseCreationBasketSreen extends React.Component {
         </View>;
     };
 
+    renderItem = ({item, index}) => {
+        return(
+            <View style = {styles.row}>
+                <Text
+                    style={[styles.item, {borderRightWidth: 2, borderRightColor: 'gray', fontWeight: 'bold'}]}
+                    onPress={this.GetItem.bind(this, 'Label : '+item.label+' Value : '+item.value)}>
+                    {item.value}
+                </Text>
+                <Input
+                    ref={ input => {
+                        this.inputs['input_' + index] = input;
+                    }}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                        this.focusNextField('input_' + parseInt(index+1));
+                    }}
+                    placeholder='Par'
+                    containerStyle={{flex: 1}}
+                    inputContainerStyle={styles.inputContainerStyle}
+                    inputStyle={styles.inputStyle}
+                    labelStyle={styles.inputLabelStyle}
+                    keyboardType='numeric'
+                    returnKeyType = {"next"}
+                    onChangeText={text => {
+                        let { pickerItems } = this.state;
+                        pickerItems[index].par = text;
+                        this.setState({ pickerItems, });
+                        this.focusNextField('input_' + parseInt(index+1));
+                    }}
+                    value={this.state.pickerItems[index].par}
+                />
+            </View>
+        )
+    }
+
     FlatListItemSeparator = () => {
         return (
             <View style={{height: 2, width: '100%', backgroundColor: 'gray'}}/>
@@ -126,47 +161,14 @@ export default class CourseCreationBasketSreen extends React.Component {
                     </View>
 
                     <FlatList
-                    persistentScrollbar={true}
-                    style = {styles.FlatList}
-                    data={this.state.pickerItems}
-                    ListHeaderComponent={this.renderHeader}
-                    ItemSeparatorComponent={this.FlatListItemSeparator}
-                    stickyHeaderIndices={[0]}
-                    renderItem={({ item, index }) => (
-                        <View style = {styles.row}>
-                            <Text
-                                style={[styles.item, {borderRightWidth: 2, borderRightColor: 'gray', fontWeight: 'bold'}]}
-                                onPress={this.GetItem.bind(this, 'Label : '+item.label+' Value : '+item.value)}>
-                                {item.value}
-                            </Text>
-                            <Input
-                                ref={ input => {
-                                    this.inputs['input_' + index] = input;
-                                }}
-                                blurOnSubmit={false}
-                                onSubmitEditing={() => {
-                                    this.focusNextField('input_' + parseInt(index+1));
-                                }}
-                                placeholder='Par'
-                                containerStyle={{flex: 1}}
-                                inputContainerStyle={styles.inputContainerStyle}
-                                inputStyle={styles.inputStyle}
-                                labelStyle={styles.inputLabelStyle}
-                                keyboardType='numeric'
-                                returnKeyType = {"next"}
-                                onChangeText={text => {
-                                    let { pickerItems } = this.state;
-                                    pickerItems[index].par = text;
-                                    this.setState({
-                                        pickerItems,
-                                    });
-                                    this.focusNextField('input_' + parseInt(index+1));
-                                }}
-                                value={this.state.pickerItems[index].par}
-                            />
-                        </View>
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
+                        persistentScrollbar={true}
+                        style = {styles.FlatList}
+                        data={this.state.pickerItems}
+                        ListHeaderComponent={this.renderHeader}
+                        ItemSeparatorComponent={this.FlatListItemSeparator}
+                        stickyHeaderIndices={[0]}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => index.toString()}
                     />
 
                     <Button

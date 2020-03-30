@@ -5,7 +5,7 @@ import { createAppContainer } from 'react-navigation'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import ProfileMainScreen from '../screens/profile/ProfileMain'
-import CompetitionsMainScreen from '../screens/competitions/CompetitionsMain'
+import PlayersMainScreen from '../screens/players/PlayersMain'
 import MoreMainScreen from '../screens/more/MoreMain'
 import TrainingsMainScreen from '../screens/trainings/TrainingsMain'
 import CoursesMainScreen from '../screens/courses/CoursesMain'
@@ -19,8 +19,8 @@ const TabNavigator = createBottomTabNavigator(
 				title: 'Treeningud',
 			})
 		},
-		Competitions: { 
-			screen: CompetitionsMainScreen,
+		Players: { 
+			screen: PlayersMainScreen,
 			navigationOptions: ({ navigation }) => ({
 				tabBarIcon: ({ focused }) => <MaterialIcons name="group" size={20} color={focused ? '#000000' : '#878787'}/>,
 				title: 'Mängijad',
@@ -55,7 +55,7 @@ const TabNavigator = createBottomTabNavigator(
 	{
 		initialRouteName: 'Trainings',
 		tabBarOptions: {
-			initialRouteName: 'Profile',
+			initialRouteName: 'Trainings',
 			activeTintColor: '#000000',
 			activeBackgroundColor: '#ebebeb',
 			inactiveTintColor: '#878787',

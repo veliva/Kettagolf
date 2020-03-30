@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import LandingScreen from './LandingScreen'
 import AboutScreen from './AboutScreen'
+import EditDataScreen from './EditData'
 
 const MoreStack = createStackNavigator(
     {
@@ -18,7 +19,13 @@ const MoreStack = createStackNavigator(
             navigationOptions: {
                 title: 'Rakenduse info'
             }
-        }
+        },
+        EditData: {
+            screen: EditDataScreen,
+            navigationOptions: {
+                title: 'Muuda andmeid'
+            }
+        },
     },
     {
         initialRouteName: 'Landing',
