@@ -6,7 +6,6 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -115,7 +114,7 @@ export default class AdditionalInfo extends React.Component {
 
     addToFirestore = () => {
         const { currentUser } = firebase.auth()
-        firestore().collection('searchAds').add({
+        firestore().collection('adverts').add({
             course: this.state.course,
             country: this.state.country,
             date: this.state.date,
@@ -123,7 +122,11 @@ export default class AdditionalInfo extends React.Component {
             lookingGroupSize: this.state.lookingGroupSize,
             comment: this.state.comment,
             user: currentUser.uid,
-            active: true
+            active: true,
+            responses: [],
+            responders: [],
+            seen: true,
+            approved: []
         })
         .then(() => {
             Alert.alert(
@@ -219,12 +222,12 @@ export default class AdditionalInfo extends React.Component {
                             prompt={'Mitmekesi oled?'}
                         >
                             <Picker.Item label="-Vali-" value="" />
-                            <Picker.Item label="Üksi" value="1" />
-                            <Picker.Item label="Kahekesi" value="2" />
-                            <Picker.Item label="Kolmekesi" value="3" />
-                            <Picker.Item label="Neljakesi" value="4" />
-                            <Picker.Item label="Viiekesi" value="5" />
-                            <Picker.Item label="Rohkem kui viiekesi" value="6" />
+                            <Picker.Item label="Üksi" value="Üksi" />
+                            <Picker.Item label="Kahekesi" value="Kahekesi2" />
+                            <Picker.Item label="Kolmekesi" value="Kolmekesi" />
+                            <Picker.Item label="Neljakesi" value="Neljakesi" />
+                            <Picker.Item label="Viiekesi" value="Viiekesi" />
+                            <Picker.Item label="Rohkem kui viiekesi" value="Rohkem kui viiekesi" />
                         </Picker>
                     </View>
 
@@ -238,12 +241,12 @@ export default class AdditionalInfo extends React.Component {
                         >
                             <Picker.Item label="-Vali-" value="" />
                             <Picker.Item label="Eelistus puudub" value="0" />
-                            <Picker.Item label="Ühte" value="1" />
-                            <Picker.Item label="Kahte" value="2" />
-                            <Picker.Item label="Kolme" value="3" />
-                            <Picker.Item label="Nelja" value="4" />
-                            <Picker.Item label="Viite" value="5" />
-                            <Picker.Item label="Rohkem kui viite" value="6" />
+                            <Picker.Item label="Ühte" value="Ühte" />
+                            <Picker.Item label="Kahte" value="Kahte" />
+                            <Picker.Item label="Kolme" value="Kolme" />
+                            <Picker.Item label="Nelja" value="Nelja" />
+                            <Picker.Item label="Viite" value="Viite" />
+                            <Picker.Item label="Rohkem kui viite" value="Rohkem kui viite" />
                         </Picker>
                     </View>
 

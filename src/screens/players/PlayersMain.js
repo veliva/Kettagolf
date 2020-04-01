@@ -11,13 +11,13 @@ const PlayersTopTabNavigator = createMaterialTopTabNavigator(
 		ViewStackNavigator: {
 			screen: ViewStackNavigator,
 			navigationOptions : {
-				title: 'Vaata',
+				title: 'Otsi',
 			}
 		},
 		AddStackNavigator: {
 			screen: AddStackNavigator,
 			navigationOptions : {
-				title: 'Lisa',
+				title: 'Minu',
 			}
 		},
 	},

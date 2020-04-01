@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList, Picker, Alert } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { Input } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -66,7 +66,6 @@ export default class LandingScreen extends React.Component {
     }
 
     timeConverter(UNIX_timestamp) {
-        console.log('timestamp: ' + UNIX_timestamp)
         const a = new Date(UNIX_timestamp);
         const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
         const year = a.getFullYear();
@@ -76,7 +75,6 @@ export default class LandingScreen extends React.Component {
             date = '0' + date
         }
         const date2 = String(date + '/' + month + '/' + year)
-        console.log(date2)
         this.setState({
             inputDate: date2
         })
@@ -119,7 +117,7 @@ export default class LandingScreen extends React.Component {
     }
 
     getWishesFromFirestore = () => {
-        let query = firestore().collection('searchAds')
+        let query = firestore().collection('adverts')
         if(this.state.showNotActive) {
             query = query.where("country", "==", this.state.country)
         } else {
@@ -136,7 +134,9 @@ export default class LandingScreen extends React.Component {
                 let tempArray = []
                 for(let i=0; i<snapshot._docs.length; i++) {
                     tempArray.push(snapshot._docs[i]._data)
-                    console.log("getWishesDatabase " + snapshot._docs[i]._data.date)
+                    tempArray[i].docID = snapshot._docs[i].id
+                    
+                    // console.log("getWishesDatabase " + snapshot._docs[i]._data.date)
                 }
                 this.setState({ wishes: tempArray})
                 // console.log(tempArray)
@@ -147,11 +147,33 @@ export default class LandingScreen extends React.Component {
 		});
     }
 
+    timeConverter2(UNIX_timestamp) {
+        const a = new Date(UNIX_timestamp);
+        const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+        const year = a.getFullYear();
+        const month = months[a.getMonth()];
+        let date = a.getDate();
+        let hour = a.getHours();
+        let min = a.getMinutes();
+        if(hour < 10) {
+            hour = '0' + hour
+        }
+        if(min < 10) {
+            min = '0' + min
+        }
+        if(date < 10) {
+            date = '0' + date
+        }
+        const time = date + '.' + month + '.' + year + ' ' + hour + ':' + min ;
+        return time
+    }
+
     renderItem = ({item, index}) => {
         // console.log(item)
         let activeText = ""
         let color = ""
         let backgroundColor = "#9ed6ff"
+        const dateTime = this.timeConverter2(item.date)
         if(item.active) {
             activeText = "Aktiivne"
             color = "green"
@@ -164,10 +186,13 @@ export default class LandingScreen extends React.Component {
         }
         return(
             <View style={[styles.row, {backgroundColor}]}>
-                <TouchableOpacity style={{width: '100%', marginLeft: 5}}>
-                    <Text>{item.course.name}</Text>
+                <TouchableOpacity 
+                    style={{width: '100%', marginLeft: 5}}
+                    onPress={() => this.props.navigation.navigate('Interested', {data: item, dateTime: dateTime})}
+                >
+                    <Text style={{fontWeight: 'bold'}}>{item.course.name}</Text>
                     <Text>{item.course.location}, {item.course.county}</Text>
-                    <Text>Vastuseid: 0</Text>
+                    <Text>{dateTime}</Text>
                     <Text style={{fontWeight: 'bold', color}}>{activeText}</Text>
                 </TouchableOpacity>
             </View>
@@ -178,7 +203,7 @@ export default class LandingScreen extends React.Component {
         return (
             <View style={styles.container}>
 
-                <View style={{flex: 0.7, width: '100%', alignItems: 'center'}}>
+                <View style={{width: '100%', alignItems: 'center'}}>
 
                     <CountryPicker
                         country={this.state.country}
@@ -187,7 +212,6 @@ export default class LandingScreen extends React.Component {
 
                     <TouchableOpacity 
                         onPress={() => this.setState({ showDatePicker: true }, console.log(this.state.date))}
-                        style={{flex: 1}}
                     >
                         <Input
                             label='Kuupäev:'
@@ -205,9 +229,9 @@ export default class LandingScreen extends React.Component {
                         />
                     </TouchableOpacity>
 
-                    <View style={{flexDirection: 'row', width: '85%', alignItems: 'flex-start'}}>
+                    <View style={{flexDirection: 'row', width: '85%', height: 40, marginBottom: 5}}>
 
-                        <Text style={{flex: 1, fontWeight: 'bold', fontSize: 18}}>Kuva mitteaktiivsed:</Text>
+                        <Text style={{flex: 1, fontWeight: 'bold', fontSize: 18, textAlignVertical: 'center'}}>Kuva mitteaktiivsed:</Text>
 
                         <Switch
                             value={this.state.showNotActive}
@@ -219,14 +243,13 @@ export default class LandingScreen extends React.Component {
 
                 </View>
 
-                <Text style={{fontWeight: 'bold', fontSize: 20, marginBottom: 5, color: '#ffff', textAlign: 'left', width: '90%'}}>Kuulutused:</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 20, marginBottom: 5, color: '#ffff', textAlign: 'left', width: '95%'}}>Kuulutused:</Text>
 
                 <FlatList
                     data={this.state.wishes}
-                    // persistentScrollbar={true}
+                    persistentScrollbar={true}
                     renderItem={this.renderItem}
                     keyExtractor={(item, index) => index.toString()}
-                    // ListHeaderComponent={this.renderHeader}
                     style={styles.FlatList}
                 />
 
@@ -275,8 +298,7 @@ const styles = StyleSheet.create({
     },
     FlatList: {
         backgroundColor: '#b3dfff',
-        flex: 1,
-        width: '90%',
+        width: '95%',
         borderRadius: 5
     },
     row: {

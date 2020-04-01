@@ -2,7 +2,7 @@ import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
 
 import LandingScreen from './LandingScreen'
-import testScreen from './Test'
+import InterestedScreen from './Interested'
 
 const ViewStackNavigator = createStackNavigator(
 	{
@@ -12,8 +12,8 @@ const ViewStackNavigator = createStackNavigator(
 				title: ''
 			}
         },
-		test: {
-			screen: testScreen,
+		Interested: {
+			screen: InterestedScreen,
 			navigationOptions: {
 				title: '123'
 			}

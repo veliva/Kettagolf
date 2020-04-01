@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import UserWishesScreen from './UserWishes'
 import CourseSelectionScreen from './CourseSelection'
 import AdditionalInfoScreen from './AdditionalInfo'
+import MyResponseScreen from './MyResponse'
 
 const AddStackNavigator = createStackNavigator(
 	{
@@ -21,6 +22,12 @@ const AddStackNavigator = createStackNavigator(
         },
 		AdditionalInfo: {
 			screen: AdditionalInfoScreen,
+			navigationOptions: {
+				title: ''
+			}
+        },
+		MyResponse: {
+			screen: MyResponseScreen,
 			navigationOptions: {
 				title: ''
 			}

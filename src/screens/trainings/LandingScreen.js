@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
         width: '95%'
     },
     suggestedItemText: {
-        fontSize: 20, 
+        fontSize: 19, 
         textAlignVertical: 'center', 
         marginLeft: 5
     },
