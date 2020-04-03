@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Picker, Alert } from 'react-native';
-import { Input, Button, Tooltip } from 'react-native-elements';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { Text, View, StyleSheet, TouchableOpacity, Picker, Alert } from 'react-native';
+import { Input, Button } from 'react-native-elements';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -223,7 +222,7 @@ export default class AdditionalInfo extends React.Component {
                         >
                             <Picker.Item label="-Vali-" value="" />
                             <Picker.Item label="Üksi" value="Üksi" />
-                            <Picker.Item label="Kahekesi" value="Kahekesi2" />
+                            <Picker.Item label="Kahekesi" value="Kahekesi" />
                             <Picker.Item label="Kolmekesi" value="Kolmekesi" />
                             <Picker.Item label="Neljakesi" value="Neljakesi" />
                             <Picker.Item label="Viiekesi" value="Viiekesi" />

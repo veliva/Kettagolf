@@ -32,6 +32,16 @@ export default class Interested extends React.Component {
         }
         this.imageFromFirebaseStorage(this.state.data.user)
         this.userDataFromFirestore(this.state.data.user)
+
+        firestore().collection('adverts').doc(this.state.data.docID).get()
+        .then((snapshot) => {
+            if(snapshot._data.responders.includes(currentUser.uid) || !snapshot._data.active) {
+                this.setState({ ownAd: true })
+            }
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
     }
 
     userDataFromFirestore = (userID) => {
@@ -75,7 +85,8 @@ export default class Interested extends React.Component {
         .then((docRef) => {
             firestore().collection('adverts').doc(this.state.data.docID).update({
                 responses: firestore.FieldValue.arrayUnion(docRef.id),
-                responders: firestore.FieldValue.arrayUnion(currentUser.uid)
+                responders: firestore.FieldValue.arrayUnion(currentUser.uid),
+                seen: false
             })
             .then(() => {})
             .catch(function(error) {
@@ -128,8 +139,8 @@ export default class Interested extends React.Component {
                     <Text>Aeg: {this.state.dateTime}</Text>
                     <Text>Pargi nimi: {data.course.name}</Text>
                     <Text>Pargi asukoht: {data.course.location}, {data.course.county}</Text>
-                    <Text>Mitut mängijat otsib: {data.lookingGroupSize}</Text>
                     <Text>Mitmekesi on: {data.myGroupSize}</Text>
+                    <Text>Mitut mängijat otsib: {data.lookingGroupSize}</Text>
                     <Text>Kommentaar: {data.comment}</Text>
                 </View>
 
@@ -137,6 +148,7 @@ export default class Interested extends React.Component {
                     <View style={{flexDirection: 'row', width: '95%', marginTop: 5, alignSelf: 'center', alignItems: 'center'}}>
                         <Text style={{textAlignVertical: 'center', textAlign: 'left', fontWeight: 'bold', color: '#ffff', fontSize: 18, flex: 0.5}}>Mitmekesi oled? </Text>
                         <Picker
+                            enabled={!this.state.ownAd}
                             selectedValue={this.state.myGroupSize}
                             style={{flex: 0.5}}
                             onValueChange={(itemValue, itemIndex) => this.setState({ myGroupSize: itemValue })}

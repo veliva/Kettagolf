@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert } from 'react-native';
-import { Avatar, Input, Button } from 'react-native-elements';
+import { Text, View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { Avatar, Button } from 'react-native-elements';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
 import { firebase } from '@react-native-firebase/auth';
@@ -23,7 +23,8 @@ export default class MyResponse extends React.Component {
             resComment: '',
             resStatus: '',
             resMyGroupSize: '',
-            resDocID: ''
+            resDocID: '',
+            trainingStart: true
         };
     }
 
@@ -56,12 +57,22 @@ export default class MyResponse extends React.Component {
 		firestore().collection('adverts').doc(this.state.data.docID).collection('responses').where("responderID", "==", currentUser.uid).get()
 		.then(snapshot => {
             const data = snapshot._docs[0]._data
-			this.setState({
-				resComment: data.comment,
-				resStatus: data.status,
-                resMyGroupSize: data.myGroupSize,
-                resDocID: snapshot._docs[0].id
-			})
+            if(data.status === 'approved') {
+                this.setState({
+                    resComment: data.comment,
+                    resStatus: data.status,
+                    resMyGroupSize: data.myGroupSize,
+                    resDocID: snapshot._docs[0].id,
+                    trainingStart: false
+                }, () => console.log(this.state.trainingStart))
+            } else {
+                this.setState({
+                    resComment: data.comment,
+                    resStatus: data.status,
+                    resMyGroupSize: data.myGroupSize,
+                    resDocID: snapshot._docs[0].id
+                })
+            }
 		})
 		.catch(err => {
 			console.log('Error getting documents', err);
@@ -98,7 +109,6 @@ export default class MyResponse extends React.Component {
 		const imageRef = firebase.storage().ref('profilePictures').child(userID);
 		await imageRef.getDownloadURL().then(result => {
 			this.setState({fireStorageImageURI: result})
-			// console.log(result)
 		})
 		.catch(err => {
 			console.log('Error getting documents', err);
@@ -121,6 +131,21 @@ export default class MyResponse extends React.Component {
 		.catch(err => {
 			console.log('Error removing document: ', err);
 		});
+    }
+
+    startTraining = () => {
+        const { currentUser } = firebase.auth()
+        const { data } = this.state
+
+        let approved = data.approved
+        approved = approved.filter(arrayItem => arrayItem !== currentUser.uid);
+        approved.push(data.user)
+        this.props.navigation.popToTop()
+        this.props.navigation.navigate('PlayerAdd', {
+            course: data.course.name,
+            approved: approved,
+            advertDocID: data.docID
+        })
     }
 
     render() {
@@ -157,7 +182,38 @@ export default class MyResponse extends React.Component {
                 </View>
 
                 <View style={{width: '95%', borderTopColor: 'gray', borderTopWidth: 1, marginTop: 5}}>
-                    <Text style={{textAlign: 'left', alignSelf: 'center', width: '100%', fontWeight: 'bold', fontSize: 20, color: '#ffff', marginTop: 5}}>Minu vastus:</Text>
+
+                    <View style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
+                        <Text style={{textAlign: 'left', alignSelf: 'center', fontWeight: 'bold', fontSize: 20, color: '#ffff', marginTop: 5}}>Minu vastus:</Text>
+
+                        <TouchableOpacity 
+                            style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}
+                            onPress={() => 
+                                Alert.alert(
+                                    'Kinnita',
+                                    'Kas soovid vastuse kustutada?',
+                                    [
+                                        {text: 'Ei',},
+                                        {text: '',},
+                                        {text: 'Jah', onPress: () => {
+                                                this.deleteResponse()
+                                            }
+                                        },
+                                    ],
+                                    {cancelable: false},
+                                )
+                            }
+                        >
+                            <Ionicon
+                                name="ios-trash"
+                                size={25}
+                                color="red"
+                                style = {{paddingRight: 10}}
+                            />
+                            <Text style={{textAlignVertical: 'center', color: 'red', fontWeight: 'bold', fontSize: 15}}>Kustuta</Text>
+                        </TouchableOpacity>
+                    </View>
+                    
                     
                     <View style={{width: '95%', marginTop: 5}}>
                         <Text>Mitmekesi olen: {this.state.resMyGroupSize}</Text>
@@ -187,34 +243,12 @@ export default class MyResponse extends React.Component {
                         />
 
                         <Button
-                            icon={
-                                <Ionicon
-                                name="ios-trash"
-                                size={25}
-                                color="red"
-                                style = {{paddingRight: 10}}
-                                />
-                            }
                             buttonStyle={styles.button}
                             containerStyle={{flex: 1, width: '100%', alignItems: 'center'}}
-                            title="Kustuta vastus"
-                            disabled={this.state.ownAd}
-                            titleStyle={{color: 'red'}}
-                            onPress={() => 
-                                Alert.alert(
-                                    'Kinnita',
-                                    'Kas soovid vastuse kustutada?',
-                                    [
-                                        {text: 'Ei',},
-                                        {text: '',},
-                                        {text: 'Jah', onPress: () => {
-                                                this.deleteResponse()
-                                            }
-                                        },
-                                    ],
-                                    {cancelable: false},
-                                )
-                            }
+                            title="Alusta treeningut"
+                            disabled={this.state.trainingStart}
+                            titleStyle={{color: '#4aaff7'}}
+                            onPress={() => { this.startTraining() }}
                         />
                     </View>
 
@@ -243,4 +277,4 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         width: '85%'
     },
-  })
+})

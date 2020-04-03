@@ -12,7 +12,8 @@ export default class UserWishes extends React.Component {
         super(props);
         this.state = {
             userWishes: [],
-            selectedIndex: 0
+            selectedIndex: 0,
+            test: true
         };
         this.updateIndex = this.updateIndex.bind(this)
     }
@@ -46,7 +47,7 @@ export default class UserWishes extends React.Component {
         } else if(selectedIndex === 1) {
             query = query.where("user", "==", currentUser.uid)
         }
-        query.get()
+        query.orderBy('seen', 'asc').get()
 		.then(snapshot => {
             this.setState({ userWishes: [] })
             if(snapshot._docs.length === 0) {
@@ -66,18 +67,18 @@ export default class UserWishes extends React.Component {
 		});
     }
 
-    getUserResponsesFromFirestore = () => {
-        const { currentUser } = firebase.auth()
-        const ref = firestore().collectionGroup('responses').where("responderID", "==", currentUser.uid)
-        ref.get()
-		.then(snapshot => {
-            console.log('responderID____________________________')
-            console.log(snapshot._docs[0].id)
-		})
-		.catch(err => {
-			console.log('Error getting documents', err);
-		});
-    }
+    // getUserResponsesFromFirestore = () => {
+    //     const { currentUser } = firebase.auth()
+    //     const ref = firestore().collectionGroup('responses').where("responderID", "==", currentUser.uid)
+    //     ref.get()
+	// 	.then(snapshot => {
+    //         console.log('responderID____________________________')
+    //         console.log(snapshot._docs[0].id)
+	// 	})
+	// 	.catch(err => {
+	// 		console.log('Error getting documents', err);
+	// 	});
+    // }
 
     timeConverter(UNIX_timestamp) {
         const a = new Date(UNIX_timestamp);
@@ -105,8 +106,21 @@ export default class UserWishes extends React.Component {
         if(selectedIndex === 0) {
             this.props.navigation.navigate('MyResponse', {data: item, dateTime: dateTime})
         } else if(selectedIndex === 1) {
-            // this.props.navigation.navigate('MyAdded', {data: item, dateTime: dateTime})
+            this.props.navigation.navigate('MyAdded', {data: item, dateTime: dateTime})
         }
+    }
+
+    updateSeen = (item) => {
+        if(this.state.selectedIndex === 0) {
+            return
+        }
+        firestore().collection('adverts').doc(item.docID).update({
+            seen: true
+        })
+        .then(() => {this.getUserWishesFromFirestore()})
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
     }
 
     renderItem = ({item, index}) => {
@@ -131,18 +145,19 @@ export default class UserWishes extends React.Component {
         let highlightedColor = {color: "orange"}
         let backgroundColor = "#7dc6fa"
         let fontWeight = "normal"
-        if(this.state.selectedIndex === 0 && item.active) {highlightedText = "Vastuse ootel"}
-        if(!item.seen) {
+        // if(this.state.selectedIndex === 0 && item.active) {highlightedText = "Vastuse ootel"}
+        if(!item.seen && this.state.selectedIndex === 1) {
             highlightedText = "Uus teade"
             backgroundColor = "#59baff"
             fontWeight = "bold"
             highlightedColor = {color: "red"}
         }
+
         return(
             <View style={[styles.row, {backgroundColor}]}>
                 <TouchableOpacity 
                     style={{width: '100%', marginLeft: 5}}
-                    onPress={() => this.navigate(item, dateTime)}
+                    onPress={() => {this.updateSeen(item), this.navigate(item, dateTime)}}
                 >
                     <Text style={{fontWeight: 'bold'}}>{item.course.name}</Text>
                     <Text style={{fontWeight}}>{item.course.location}, {item.course.county}</Text>

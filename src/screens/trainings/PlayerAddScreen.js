@@ -5,7 +5,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { firebase } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 
 export default class TrainingCreationSreen extends React.Component {
     constructor(props) {
@@ -17,11 +16,12 @@ export default class TrainingCreationSreen extends React.Component {
             playerIDs: [],
             player: null,
             playerName: null,
-            itselfUID: null
+            itselfUID: null,
+            advertDocID: null
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({
             course: this.props.navigation.state.params.course,
         })
@@ -29,7 +29,18 @@ export default class TrainingCreationSreen extends React.Component {
 
         const { currentUser } = firebase.auth()
         this.setState({itselfUID: currentUser.uid})
-        this.addPlayer(currentUser.uid)
+        await this.addPlayer(currentUser.uid)
+
+        if(this.props.navigation.state.params.approved !== undefined) {
+            const test = this.props.navigation.state.params.approved
+            for(let i=0; i < test.length; i++ ) {
+                await this.addPlayer(test[i])
+            }
+        }
+
+        if(this.props.navigation.state.params.advertDocID !== undefined) {
+            this.setState({ advertDocID: this.props.navigation.state.params.advertDocID })
+        }
     }
 
     async removePlayer(userID) {
@@ -51,8 +62,8 @@ export default class TrainingCreationSreen extends React.Component {
             player: null
         });
         console.log(this.state.players)
-        console.log(this.state.player)
         console.log(this.state.playerIDs)
+        console.log(this.state.player)
     }
 
     async userDataFromFirestore(userID) {
@@ -165,7 +176,7 @@ export default class TrainingCreationSreen extends React.Component {
                     source={{
                       uri: item.imageURI,
                     }}
-                    containerStyle={{height: 80, width: 80}}
+                    containerStyle={{height: 65, width: 65}}
                 />
 
                 <View style={styles.rowName}>
@@ -210,58 +221,33 @@ export default class TrainingCreationSreen extends React.Component {
                     <Text style={styles.courseText}>{this.state.course}</Text>
                 </View>
 
-                <View style={styles.buttonsContainer}>
-                    <View style={styles.buttonsRow}>
-                        <Input
-                            placeholder='Mängija nimi'
-                            containerStyle={{flex: 0.6, justifyContent: 'center'}}
-                            autoCapitalize='words'
-                            onChangeText={playerName => this.setState({ playerName })}
-                            value={this.state.playerName}
-                            onSubmitEditing={() => { this.searchUserByName() }}
-                            inputContainerStyle={styles.inputContainerStyle}
-                            labelStyle={styles.inputLabelStyle}
-                            inputStyle={styles.inputStyle}
-                        />
-                        <Button
-                            title='Lisa mängija'
-                            titleStyle={{color: '#4aaff7'}}
-                            icon={
-                                <MaterialIcon
-                                name="person-add"
-                                size={15}
-                                color="#4aaff7"
-                                style = {{paddingRight: 10}}
-                                />
-                            }
-                            containerStyle={{flex: 0.4}}
-                            buttonStyle={styles.button}
-                            onPress = { () => { this.searchUserByName() }}
-                        />
-                    </View>
-                    
-                    <View style={styles.buttonsRow}>
-                        <Button
-                            title='Lisa mind'
-                            containerStyle={{flex: 1, marginRight: 2, justifyContent: 'center'}}
-                            disabled={this.state.itselfAdded}
-                            buttonStyle={{borderRadius: 20}}
-                            onPress={() => { 
-                                this.setState({itselfAdded: true})
-                                this.addPlayer(this.state.itselfUID)
-                            }}
-                        />
-                        <Button
-                            title='Eemalda mind'
-                            containerStyle={{flex: 1, justifyContent: 'center'}}
-                            disabled={!this.state.itselfAdded}
-                            buttonStyle={{borderRadius: 20}}
-                            onPress={() => {
-                                this.setState({itselfAdded: false})
-                                this.removePlayer(this.state.itselfUID)
-                            }}
-                        />
-                    </View>
+                <View style={styles.buttonsRow}>
+                    <Input
+                        placeholder='Mängija nimi'
+                        containerStyle={{flex: 0.6, justifyContent: 'center'}}
+                        autoCapitalize='words'
+                        onChangeText={playerName => this.setState({ playerName })}
+                        value={this.state.playerName}
+                        onSubmitEditing={() => { this.searchUserByName() }}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        labelStyle={styles.inputLabelStyle}
+                        inputStyle={styles.inputStyle}
+                    />
+                    <Button
+                        title='Lisa mängija'
+                        titleStyle={{color: '#4aaff7'}}
+                        icon={
+                            <MaterialIcon
+                            name="person-add"
+                            size={15}
+                            color="#4aaff7"
+                            style = {{paddingRight: 10}}
+                            />
+                        }
+                        containerStyle={{flex: 0.4}}
+                        buttonStyle={styles.button}
+                        onPress = { () => { this.searchUserByName() }}
+                    />
                 </View>
 
                 <View style={styles.tableContainer}>
@@ -283,6 +269,13 @@ export default class TrainingCreationSreen extends React.Component {
                         containerStyle={{width: '90%', alignItems: 'center'}}
                         buttonStyle={styles.button}
                         onPress={() => {
+                            if(this.state.advertDocID !== null) {
+                                firestore().collection('adverts').doc(this.state.advertDocID).update({ active: false })
+                                .then(() => {})
+                                .catch(function(error) {
+                                    console.error("Error writing document: ", error);
+                                });
+                            }
                             this.props.navigation.navigate('TrainingMarking', {
                                 course: this.state.course,
                                 players: this.state.players,
@@ -314,7 +307,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     inputStyle: {
-        color: '#ffff'
+        color: '#ffff',
     },
     courseContainer: {
         flex: 0.2,
@@ -322,16 +315,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     tableContainer: {
-        flex: 0.5,
+        flex: 0.6,
         width: '90%',
         alignSelf: 'center'
-    },
-    buttonsContainer: {
-        flex: 0.2,
-        flexDirection: 'column',
-        width: '100%',
-        alignSelf: 'center',
-        alignItems: 'center'
     },
     courseText: {
         fontWeight: 'bold',
@@ -340,7 +326,9 @@ const styles = StyleSheet.create({
     buttonsRow: {
         flexDirection: 'row', 
         width: '90%',
-        flex: 1,
+        flex: 0.15,
+        alignItems: 'center',
+        alignSelf: 'center',
     },
     FlatList: {
         width: '100%',
@@ -363,14 +351,14 @@ const styles = StyleSheet.create({
         paddingLeft: 25
     },
     bottomContainer: {
-        flex: 0.1,
+        flex: 0.15,
         alignItems: 'center',
+        justifyContent: 'center',
     },
     button: {
-        marginTop: 12,
         padding: 12,
         backgroundColor: '#ffff',
         borderRadius: 20,
-        width: '95%'
+        width: '100%'
     },
 })

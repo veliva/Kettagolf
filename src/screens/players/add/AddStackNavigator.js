@@ -5,6 +5,7 @@ import UserWishesScreen from './UserWishes'
 import CourseSelectionScreen from './CourseSelection'
 import AdditionalInfoScreen from './AdditionalInfo'
 import MyResponseScreen from './MyResponse'
+import MyAddedScreen from './MyAdded'
 
 const AddStackNavigator = createStackNavigator(
 	{
@@ -28,6 +29,12 @@ const AddStackNavigator = createStackNavigator(
         },
 		MyResponse: {
 			screen: MyResponseScreen,
+			navigationOptions: {
+				title: ''
+			}
+        },
+		MyAdded: {
+			screen: MyAddedScreen,
 			navigationOptions: {
 				title: ''
 			}

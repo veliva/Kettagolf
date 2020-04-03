@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Picker, Alert } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, } from 'react-native';
 import { Input } from 'react-native-elements';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Switch } from 'react-native-paper';
 
