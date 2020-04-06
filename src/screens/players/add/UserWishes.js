@@ -59,7 +59,7 @@ export default class UserWishes extends React.Component {
                     tempArray[i].docID = snapshot._docs[i].id
                 }
                 this.setState({ userWishes: tempArray})
-                console.log(tempArray)
+                // console.log(tempArray)
             }
 		})
 		.catch(err => {

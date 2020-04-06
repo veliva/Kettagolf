@@ -239,7 +239,7 @@ export default class AdditionalInfo extends React.Component {
                             prompt={'Mitut mängijat otsid?'}
                         >
                             <Picker.Item label="-Vali-" value="" />
-                            <Picker.Item label="Eelistus puudub" value="0" />
+                            <Picker.Item label="Eelistus puudub" value="Eelistus puudub" />
                             <Picker.Item label="Ühte" value="Ühte" />
                             <Picker.Item label="Kahte" value="Kahte" />
                             <Picker.Item label="Kolme" value="Kolme" />

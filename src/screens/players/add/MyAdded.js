@@ -203,6 +203,7 @@ export default class MyResponse extends React.Component {
     renderItem = ({item, index}) => {
         // console.log(item)
         let imageRef = {uid: null, uri: null}
+        let imageRefUri = null
         let usersRef = {
             name: null,
             gender: null,
@@ -210,8 +211,17 @@ export default class MyResponse extends React.Component {
             pdgaNumber: null,
             uid: null
         }
-        imageRef = this.state.images.find(o => o.uid === item.responderID);
-        usersRef = this.state.users.find(o => o.uid === item.responderID);
+        
+        if(this.state.images.length > 0) {
+            imageRef = this.state.images.find(o => o.uid === item.responderID);
+            console.log("!!!!imageRef typeof: "+typeof(imageRef))
+            usersRef = this.state.users.find(o => o.uid === item.responderID);
+            if(imageRef === undefined) {
+                return
+            } else if(imageRef !== undefined) {
+                imageRefUri = imageRef.uri
+            }
+        }
 
         let backgroundColor = "#7dc6fa"
         let fontWeight = "normal"
@@ -236,10 +246,10 @@ export default class MyResponse extends React.Component {
                             <Text style={{textAlign: 'left', textAlignVertical: 'bottom', fontWeight}}>PDGA#: {usersRef.pdgaNumber}</Text>
                             <Text style={{flex: 1, fontWeight}}>Mitmekesi on: {item.myGroupSize}</Text>
                         </View>
-
+                        
                         <Avatar
                             source={{
-                                uri: imageRef.uri,
+                                uri: imageRefUri,
                             }}
                             style={{ flex: 0.20, aspectRatio: 1, resizeMode: 'contain', borderRadius: 20, overflow: "hidden", }}
                         />

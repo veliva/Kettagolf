@@ -15,6 +15,7 @@ export default class SignUp extends React.Component {
         this.state = {
             email: '', 
             password: '',
+            passwordConfirm: '',
             userID: '',
             firstName: '', 
             lastName: '',
@@ -39,6 +40,11 @@ export default class SignUp extends React.Component {
         }
         if(this.state.password === null || this.state.password === '') {
             this.setState({snackText: 'Palun sisesta parool!'})
+            this.setState({ visible: true })
+            return
+        }
+        if(this.state.password !== this.state.passwordConfirm) {
+            this.setState({snackText: 'Paroolid on erinevad!'})
             this.setState({ visible: true })
             return
         }
@@ -189,8 +195,8 @@ export default class SignUp extends React.Component {
                         leftIcon={() => {
                             return <MaterialIcon name='vpn-key' size={20} color="#ffff" />;
                         }}
-                        onChangeText={password => this.setState({ password })}
-                        value={this.state.password}
+                        onChangeText={passwordConfirm => this.setState({ passwordConfirm })}
+                        value={this.state.passwordConfirm}
                         inputContainerStyle={styles.inputContainerStyle}
                         containerStyle={{marginTop: 10}}
                         labelStyle={styles.inputLabelStyle}
