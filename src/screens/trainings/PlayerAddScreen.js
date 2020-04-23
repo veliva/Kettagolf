@@ -142,7 +142,7 @@ export default class TrainingCreationSreen extends React.Component {
             if(snapshot._docs.length === 0) {
                 Alert.alert(
                     'Tundmatu nimi',
-                    'Sellise nimega mängijat pole andmebaasis. Kas soovid sisestatud nimega ajutise mängija treeningusse lisada?',
+                    'Sellise nimega mängijat pole andmebaasis. Kas soovid sisestatud nimega registreerimata mängija treeningusse lisada?',
                     [
                       {text: 'Ei', },
                       {

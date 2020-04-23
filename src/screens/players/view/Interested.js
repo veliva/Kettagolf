@@ -20,7 +20,7 @@ export default class Interested extends React.Component {
             pdgaNumber: '',
             comment: '',
             commentLength: 150,
-            ownAd: false,
+            answeringDisabled: false,
             myGroupSize: '',
         };
     }
@@ -28,7 +28,7 @@ export default class Interested extends React.Component {
     componentDidMount() {
         const { currentUser } = firebase.auth()
         if(this.state.data.user === currentUser.uid) {
-            this.setState({ ownAd: true })
+            this.setState({ answeringDisabled: true })
         }
         this.imageFromFirebaseStorage(this.state.data.user)
         this.userDataFromFirestore(this.state.data.user)
@@ -36,7 +36,7 @@ export default class Interested extends React.Component {
         firestore().collection('adverts').doc(this.state.data.docID).get()
         .then((snapshot) => {
             if(snapshot._data.responders.includes(currentUser.uid) || !snapshot._data.active) {
-                this.setState({ ownAd: true })
+                this.setState({ answeringDisabled: true })
             }
         })
         .catch(function(error) {
@@ -148,7 +148,7 @@ export default class Interested extends React.Component {
                     <View style={{flexDirection: 'row', width: '95%', marginTop: 5, alignSelf: 'center', alignItems: 'center'}}>
                         <Text style={{textAlignVertical: 'center', textAlign: 'left', fontWeight: 'bold', color: '#ffff', fontSize: 18, flex: 0.5}}>Mitmekesi oled? </Text>
                         <Picker
-                            enabled={!this.state.ownAd}
+                            enabled={!this.state.answeringDisabled}
                             selectedValue={this.state.myGroupSize}
                             style={{flex: 0.5}}
                             onValueChange={(itemValue, itemIndex) => this.setState({ myGroupSize: itemValue })}
@@ -169,7 +169,7 @@ export default class Interested extends React.Component {
                         multiline={true}
                         maxLength={150}
                         value={this.state.comment}
-                        disabled={this.state.ownAd}
+                        disabled={this.state.answeringDisabled}
                         onChangeText={text => {
                             const maxLength = 150;
                             this.setState({
@@ -205,7 +205,7 @@ export default class Interested extends React.Component {
                             buttonStyle={styles.button}
                             containerStyle={{flex: 1, width: '100%', alignItems: 'center'}}
                             title="Kinnita"
-                            disabled={this.state.ownAd}
+                            disabled={this.state.answeringDisabled}
                             titleStyle={{color: '#4aaff7'}}
                             onPress={() => 
                                 Alert.alert(

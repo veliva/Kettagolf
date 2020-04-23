@@ -86,7 +86,7 @@ export default class MyResponse extends React.Component {
         } else if(resStatus === 'rejected') {
             return <Text style={{fontWeight: 'bold', color: 'red'}}>Tagasi lükatud</Text>
         } else if(resStatus === 'waiting') {
-            return <Text style={{fontWeight: 'bold', color: 'orange'}}>Vastuse ootel</Text>
+            return <Text style={{fontWeight: 'bold', color: 'orange'}}>Ootel</Text>
         } else {
             return <Text></Text>
         }
@@ -220,7 +220,7 @@ export default class MyResponse extends React.Component {
                         <Text>Kommentaar: {this.state.resComment}</Text>
                     </View>
 
-                    <Text style={{textAlign: 'left', alignSelf: 'center', width: '100%', fontWeight: 'bold', fontSize: 20, color: '#ffff', marginTop: 5}}>Staatus: {this.statusText()}</Text>
+                    <Text style={{textAlign: 'left', alignSelf: 'center', width: '100%', fontWeight: 'bold', fontSize: 20, color: '#ffff', marginTop: 5}}>Olek: {this.statusText()}</Text>
 
                 </View>
 

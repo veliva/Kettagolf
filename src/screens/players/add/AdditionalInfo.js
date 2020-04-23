@@ -151,103 +151,110 @@ export default class AdditionalInfo extends React.Component {
         return (
             <View style={styles.container}>
 
-                    <View style={{flexDirection: 'row', width: '90%'}}>
-                        <TouchableOpacity 
-                            onPress={() => this.setState({ showDatePicker: true }, console.log(this.state.date))}
-                            style={{flex: 0.6}}
-                        >
-                            <Input
-                                label='Kuupäev:'
-                                placeholder='Kuupäev'
-                                disabled={true}
-                                value={this.state.inputDate}
-                                leftIcon={() => {
-                                    return <MaterialCommunityIcon name='calendar' size={20} color="black" />;
-                                }}
-                                disabledInputStyle={{opacity: 1}}
-                                containerStyle={{marginTop: 10, marginBottom: 10}}
-                                inputContainerStyle={styles.inputContainerStyle}
-                                labelStyle={styles.inputLabelStyle}
-                                inputStyle={styles.inputStyle}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            onPress={() => this.setState({ showTimePicker: true }, console.log(this.state.date))}
-                            style={{flex: 0.4}}
-                        >
-                            <Input
-                                label='Kellaaeg:'
-                                placeholder='Kellaaeg'
-                                disabled={true}
-                                value={this.state.inputTime}
-                                leftIcon={() => {
-                                    return <MaterialCommunityIcon name='clock' size={20} color="black" />;
-                                }}
-                                disabledInputStyle={{opacity: 1}}
-                                containerStyle={{marginTop: 10, marginBottom: 10}}
-                                inputContainerStyle={styles.inputContainerStyle}
-                                labelStyle={styles.inputLabelStyle}
-                                inputStyle={styles.inputStyle}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                <View style={{width: '85%', marginTop: 5}}>
+                    <Text style={{fontWeight: 'bold', fontSize: 18, color: 'white'}}>Valitud park:</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 22, textAlign: 'center'}}>{this.props.navigation.state.params.course.name}</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 17, textAlign: 'center'}}>{this.props.navigation.state.params.course.location}, {this.props.navigation.state.params.course.county}</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 17, textAlign: 'center'}}>{this.props.navigation.state.params.course.tracks.length} rada</Text>
+                </View>
 
-                    {this.state.showDatePicker && (
-                        <DateTimePicker 
-                            value={this.state.date}
-                            mode='date'
-                            display='default'
-                            minimumDate={this.state.yesterdayDate}
-                            onChange={ dateTime => {this.setState({showDatePicker: false}), this.changeDateTime(dateTime)}}
+                <View style={{flexDirection: 'row', width: '90%'}}>
+                    <TouchableOpacity 
+                        onPress={() => this.setState({ showDatePicker: true }, console.log(this.state.date))}
+                        style={{flex: 0.6}}
+                    >
+                        <Input
+                            label='Kuupäev:'
+                            placeholder='Kuupäev'
+                            disabled={true}
+                            value={this.state.inputDate}
+                            leftIcon={() => {
+                                return <MaterialCommunityIcon name='calendar' size={20} color="black" />;
+                            }}
+                            disabledInputStyle={{opacity: 1}}
+                            containerStyle={{marginTop: 10, marginBottom: 10}}
+                            inputContainerStyle={styles.inputContainerStyle}
+                            labelStyle={styles.inputLabelStyle}
+                            inputStyle={styles.inputStyle}
                         />
-                    )}
-                    {this.state.showTimePicker && (
-                        <DateTimePicker 
-                            value={this.state.date}
-                            mode='time'
-                            display='default'
-                            minuteInterval={5}
-                            is24Hour={true}
-                            onChange={ dateTime => {this.setState({showTimePicker: false}), this.changeDateTime(dateTime)}}
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        onPress={() => this.setState({ showTimePicker: true }, console.log(this.state.date))}
+                        style={{flex: 0.4}}
+                    >
+                        <Input
+                            label='Kellaaeg:'
+                            placeholder='Kellaaeg'
+                            disabled={true}
+                            value={this.state.inputTime}
+                            leftIcon={() => {
+                                return <MaterialCommunityIcon name='clock' size={20} color="black" />;
+                            }}
+                            disabledInputStyle={{opacity: 1}}
+                            containerStyle={{marginTop: 10, marginBottom: 10}}
+                            inputContainerStyle={styles.inputContainerStyle}
+                            labelStyle={styles.inputLabelStyle}
+                            inputStyle={styles.inputStyle}
                         />
-                    )}
-                    
-                    <View style={{flexDirection: 'column', width: '90%', marginTop: 10}}>
-                        <Text style={{textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold', color: '#ffff', fontSize: 18}}>Mitmekesi oled? </Text>
-                        <Picker
-                            selectedValue={this.state.myGroupSize}
-                            style={{width: '50%', alignSelf: 'center'}}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ myGroupSize: itemValue })}
-                            prompt={'Mitmekesi oled?'}
-                        >
-                            <Picker.Item label="-Vali-" value="" />
-                            <Picker.Item label="Üksi" value="Üksi" />
-                            <Picker.Item label="Kahekesi" value="Kahekesi" />
-                            <Picker.Item label="Kolmekesi" value="Kolmekesi" />
-                            <Picker.Item label="Neljakesi" value="Neljakesi" />
-                            <Picker.Item label="Viiekesi" value="Viiekesi" />
-                            <Picker.Item label="Rohkem kui viiekesi" value="Rohkem kui viiekesi" />
-                        </Picker>
-                    </View>
+                    </TouchableOpacity>
+                </View>
 
-                    <View style={{flexDirection: 'column', width: '90%', marginTop: 10}}>
-                        <Text style={{textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold', color: '#ffff', fontSize: 18}}>Mitut mängijat otsid? </Text>
-                        <Picker
-                            selectedValue={this.state.lookingGroupSize}
-                            style={{width: '50%', alignSelf: 'center'}}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ lookingGroupSize: itemValue })}
-                            prompt={'Mitut mängijat otsid?'}
-                        >
-                            <Picker.Item label="-Vali-" value="" />
-                            <Picker.Item label="Eelistus puudub" value="Eelistus puudub" />
-                            <Picker.Item label="Ühte" value="Ühte" />
-                            <Picker.Item label="Kahte" value="Kahte" />
-                            <Picker.Item label="Kolme" value="Kolme" />
-                            <Picker.Item label="Nelja" value="Nelja" />
-                            <Picker.Item label="Viite" value="Viite" />
-                            <Picker.Item label="Rohkem kui viite" value="Rohkem kui viite" />
-                        </Picker>
-                    </View>
+                {this.state.showDatePicker && (
+                    <DateTimePicker 
+                        value={this.state.date}
+                        mode='date'
+                        display='default'
+                        minimumDate={this.state.yesterdayDate}
+                        onChange={ dateTime => {this.setState({showDatePicker: false}), this.changeDateTime(dateTime)}}
+                    />
+                )}
+                {this.state.showTimePicker && (
+                    <DateTimePicker 
+                        value={this.state.date}
+                        mode='time'
+                        display='default'
+                        minuteInterval={5}
+                        is24Hour={true}
+                        onChange={ dateTime => {this.setState({showTimePicker: false}), this.changeDateTime(dateTime)}}
+                    />
+                )}
+                
+                <View style={{flexDirection: 'column', width: '90%', marginTop: 10}}>
+                    <Text style={{textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold', color: '#ffff', fontSize: 18}}>Mitmekesi oled? </Text>
+                    <Picker
+                        selectedValue={this.state.myGroupSize}
+                        style={{width: '50%', alignSelf: 'center'}}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ myGroupSize: itemValue })}
+                        prompt={'Mitmekesi oled?'}
+                    >
+                        <Picker.Item label="-Vali-" value="" />
+                        <Picker.Item label="Üksi" value="Üksi" />
+                        <Picker.Item label="Kahekesi" value="Kahekesi" />
+                        <Picker.Item label="Kolmekesi" value="Kolmekesi" />
+                        <Picker.Item label="Neljakesi" value="Neljakesi" />
+                        <Picker.Item label="Viiekesi" value="Viiekesi" />
+                        <Picker.Item label="Rohkem kui viiekesi" value="Rohkem kui viiekesi" />
+                    </Picker>
+                </View>
+
+                <View style={{flexDirection: 'column', width: '90%', marginTop: 10}}>
+                    <Text style={{textAlignVertical: 'center', textAlign: 'center', fontWeight: 'bold', color: '#ffff', fontSize: 18}}>Mitut mängijat otsid? </Text>
+                    <Picker
+                        selectedValue={this.state.lookingGroupSize}
+                        style={{width: '50%', alignSelf: 'center'}}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ lookingGroupSize: itemValue })}
+                        prompt={'Mitut mängijat otsid?'}
+                    >
+                        <Picker.Item label="-Vali-" value="" />
+                        <Picker.Item label="Eelistus puudub" value="Eelistus puudub" />
+                        <Picker.Item label="Ühte" value="Ühte" />
+                        <Picker.Item label="Kahte" value="Kahte" />
+                        <Picker.Item label="Kolme" value="Kolme" />
+                        <Picker.Item label="Nelja" value="Nelja" />
+                        <Picker.Item label="Viite" value="Viite" />
+                        <Picker.Item label="Rohkem kui viite" value="Rohkem kui viite" />
+                    </Picker>
+                </View>
 
                 <Input
                     label={'Kommentaar: '}

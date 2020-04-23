@@ -194,7 +194,7 @@ export default class MyResponse extends React.Component {
         } else if(resStatus === 'rejected') {
             return <Text style={{fontWeight: 'bold', color: 'red'}}>Tagasi lükatud</Text>
         } else if(resStatus === 'waiting') {
-            return <Text style={{fontWeight: 'bold', color: 'orange'}}>Vastuse ootel</Text>
+            return <Text style={{fontWeight: 'bold', color: 'orange'}}>Ootel</Text>
         } else {
             return <Text></Text>
         }
@@ -257,7 +257,7 @@ export default class MyResponse extends React.Component {
                     </View>
                     
                     <Text style={{flex: 1, fontWeight}}>Kommentaar: {item.comment}</Text>
-                    <Text style={{flex: 1, fontWeight: 'bold', width: '95%', borderTopWidth: 1, borderTopColor: 'gray'}}>Staatus: {this.statusText(item.status)}</Text>
+                    <Text style={{flex: 1, fontWeight: 'bold', width: '95%', borderTopWidth: 1, borderTopColor: 'gray'}}>Olek: {this.statusText(item.status)}</Text>
 
                 </TouchableOpacity>
             </View>
@@ -390,7 +390,7 @@ export default class MyResponse extends React.Component {
                             </View>
                         
                             <Text>Kommentaar: {this.state.modalItem.comment}</Text>
-                            <Text style={{fontWeight: 'bold', width: '100%', borderTopWidth: 1, borderTopColor: 'gray'}}>Staatus: {this.statusText(this.state.modalItem.status)}</Text>
+                            <Text style={{fontWeight: 'bold', width: '100%', borderTopWidth: 1, borderTopColor: 'gray'}}>Olek: {this.statusText(this.state.modalItem.status)}</Text>
                             
                             <View style={{flexDirection: 'row', width: '95%', alignItems: 'center', marginTop: 12}}>
                                 <TouchableOpacity

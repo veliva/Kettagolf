@@ -13,7 +13,6 @@ export default class UserWishes extends React.Component {
         this.state = {
             userWishes: [],
             selectedIndex: 0,
-            test: true
         };
         this.updateIndex = this.updateIndex.bind(this)
     }
@@ -66,19 +65,6 @@ export default class UserWishes extends React.Component {
 			console.log('Error getting documents', err);
 		});
     }
-
-    // getUserResponsesFromFirestore = () => {
-    //     const { currentUser } = firebase.auth()
-    //     const ref = firestore().collectionGroup('responses').where("responderID", "==", currentUser.uid)
-    //     ref.get()
-	// 	.then(snapshot => {
-    //         console.log('responderID____________________________')
-    //         console.log(snapshot._docs[0].id)
-	// 	})
-	// 	.catch(err => {
-	// 		console.log('Error getting documents', err);
-	// 	});
-    // }
 
     timeConverter(UNIX_timestamp) {
         const a = new Date(UNIX_timestamp);
@@ -145,7 +131,6 @@ export default class UserWishes extends React.Component {
         let highlightedColor = {color: "orange"}
         let backgroundColor = "#7dc6fa"
         let fontWeight = "normal"
-        // if(this.state.selectedIndex === 0 && item.active) {highlightedText = "Vastuse ootel"}
         if(!item.seen && this.state.selectedIndex === 1) {
             highlightedText = "Uus teade"
             backgroundColor = "#59baff"
