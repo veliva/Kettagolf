@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Picker, Alert } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Picker, Alert, ScrollView } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -149,7 +149,7 @@ export default class AdditionalInfo extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container} contentContainerStyle={{alignItems: 'center',}}>
 
                 <View style={{width: '85%', marginTop: 5}}>
                     <Text style={{fontWeight: 'bold', fontSize: 18, color: 'white'}}>Valitud park:</Text>
@@ -313,7 +313,7 @@ export default class AdditionalInfo extends React.Component {
                     />
                 </View>
 
-            </View>
+            </ScrollView>
         );
     }
 }
@@ -321,7 +321,6 @@ export default class AdditionalInfo extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: '#9ed6ff',
         width: '100%',
     },

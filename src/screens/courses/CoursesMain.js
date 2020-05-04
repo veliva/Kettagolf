@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import MapView from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 
@@ -102,14 +102,26 @@ export default class CoursesMain extends React.Component {
                         }}
                     >
                         {this.state.sortedCourseLocations.map((marker, index) => (
+                            // <Marker
+                            //     key = {index}
+                            //     tracksViewChanges={false}
+                            //     coordinate={marker.coordinates}
+                            //     title={marker.name}
+                            //     description={marker.description}
+                            //     image={require('../../assets/discbasket.png')}
+                            // />
                             <Marker
                                 key = {index}
                                 tracksViewChanges={false}
                                 coordinate={marker.coordinates}
                                 title={marker.name}
                                 description={marker.description}
-                                image={require('../../assets/discbasket.png')}
-                            />
+                            >
+                                <Image 
+                                    style={styles.markerIcon}
+                                    source={require('../../assets/discbasket.png')}
+                                />
+                            </Marker>
                         ))}
                     </MapView>
                 </View>
@@ -137,4 +149,8 @@ const styles = StyleSheet.create({
       right: 0,
       bottom: 0,
     },
+    markerIcon: {
+        height: 55,
+        width: 55
+    }
   })
