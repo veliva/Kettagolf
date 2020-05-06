@@ -4,6 +4,7 @@ Projekt on loodud Tallinna Ülikooli Digitehnoloogiate instituudi bakalaureuset�
   
 ## Kirjeldus  
 Eesmärk on luua mobiilirakendus, mida saab kasutada teiste kettagolfi mängijate leidmiseks ning kettagolfi treeningute tulemuste märkimiseks. Rakendus on mõeldud nii alustavatele kui aktiivsetele mängijatele.  
+
 Rakenduse kasutamiseks tuleb end kasutajaks registreerida. Registreerunud kasutajad saavad luua treeninguid, treeningus osalejateks saab lisada nii teisi registreerunud kasutajaid kui ka ühe treeningu põhiseid registreerimata kasutajaid. Mängukaaslaste otsimisel saavad kasutajad lisada kuulutusi ning vastata teiste lisatud kuulutustele.  
   
 ## Kasutatud tehnoloogiad  
