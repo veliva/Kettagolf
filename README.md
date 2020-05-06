@@ -44,9 +44,9 @@ Treeningu tulemused             |  Pargid kaardil
 :-------------------------:|:-------------------------:
 ![Tulemused](README_images/Tulemused.jpg)  |  ![Pargid](README_images/Pargid.jpg)
   
-Kuulutuste otsimine             |  Kuulutusele vastamine
+Kuulutuste otsimine             |  Kuulutus ja selle vastused
 :-------------------------:|:-------------------------:
-![Otsimine](README_images/Otsimine.jpg)  |  ![Vastamine](README_images/Vastamine.jpg)
+![Otsimine](README_images/Otsimine.jpg)  |  ![Kuulutus](README_images/Vastamine.jpg)
 
 ## Litsents
 [MIT litsents](LICENSE)  
