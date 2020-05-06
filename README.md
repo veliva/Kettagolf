@@ -33,6 +33,21 @@ Rakendust on võimalik paigaldada ainult Androidi operatsioonisüsteemi kasutava
   
 Rakenduse käitamiseks läbi arenduskeskkonna tuleb React Native'i veebilehel oleva [juhendi](https://reactnative.dev/docs/environment-setup) järgi see kõigepealt üles seada. Arenduskeskkonna üles seadmisel tuleb valida React Native CLI, mitte Expo CLI.
   
+## Ekraanipildid
+Järgnevalt on kuvatud mõningad ekraanipildid rakendusest.  
+  
+Treeningud             |  Tulemuste märkimine
+:-------------------------:|:-------------------------:
+![Treeningud](README_images/Treeningud.jpg)  |  ![Tulemuste märkimine](README_images/Märkimine.jpg)
+  
+Treeningu tulemused             |  Pargid kaardil
+:-------------------------:|:-------------------------:
+![Tulemused](README_images/Tulemused.jpg)  |  ![Pargid](README_images/Pargid.jpg)
+  
+Kuulutuste otsimine             |  Kuulutusele vastamine
+:-------------------------:|:-------------------------:
+![Otsimine](README_images/Otsimine.jpg)  |  ![Vastamine](README_images/Vastamine.jpg)
+
 ## Litsents
 [MIT litsents](LICENSE)  
   
