@@ -9,6 +9,7 @@ Rakenduse kasutamiseks tuleb end kasutajaks registreerida. Registreerunud kasuta
   
 ## Kasutatud tehnoloogiad  
 Kasutatud tehnoloogiad ja teegid, koos versioonidega on failis [package.json](package.json).  
+
 Kasutatud tehnoloogiad:
 * [React Native](https://reactnative.dev/docs/getting-started)
 * [Firebase](https://firebase.google.com/)
@@ -23,6 +24,14 @@ Kasutatud React Native'i teegid:
 * [React Native Image Picker](https://github.com/react-native-community/react-native-image-picker)
 * [React Native Maps](https://github.com/react-native-community/react-native-maps)
 * [React Native DateTimePicker](https://github.com/react-native-community/datetimepicker)  
+  
+## Paigaldamine
+Rakendust on võimalik paigaldada ainult Androidi operatsioonisüsteemi kasutavatele mobiiltelefonidele. Selleks tuleb läbida järgnevad sammud:  
+* Lae telefoni alla [Kettagolf.apk](Kettagolf.apk) fail
+* Paigalda rakendus telefoni
+* Ava rakendus ning logi sisse või loo kasutaja
+  
+Rakenduse käitamiseks läbi arenduskeskkonna tuleb React Native'i veebilehel oleva [juhendi](https://reactnative.dev/docs/environment-setup) järgi see kõigepealt üles seada. Arenduskeskkonna üles seadmisel tuleb valida React Native CLI, mitte Expo CLI.
   
 ## Litsents
 [MIT litsents](LICENSE)
