@@ -34,4 +34,6 @@ Rakendust on võimalik paigaldada ainult Androidi operatsioonisüsteemi kasutava
 Rakenduse käitamiseks läbi arenduskeskkonna tuleb React Native'i veebilehel oleva [juhendi](https://reactnative.dev/docs/environment-setup) järgi see kõigepealt üles seada. Arenduskeskkonna üles seadmisel tuleb valida React Native CLI, mitte Expo CLI.
   
 ## Litsents
-[MIT litsents](LICENSE)
+[MIT litsents](LICENSE)  
+  
+Rakenduses kasutatud [kettagolfi korvi ikoon](https://thenounproject.com/term/disc-golf-basket/1299/) on kaitstud Creative Commons litsentsiga. Ikooni autor on Steve Cardwell.
