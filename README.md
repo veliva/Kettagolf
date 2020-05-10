@@ -36,17 +36,13 @@ Rakenduse käitamiseks läbi arenduskeskkonna tuleb React Native'i veebilehel ol
 ## Ekraanipildid
 Järgnevalt on kuvatud mõningad ekraanipildid rakendusest.  
   
-Treeningud             |  Tulemuste märkimine
+Treeningud             |  Treeningu tulemused
 :-------------------------:|:-------------------------:
-![Treeningud](README_images/Treeningud.jpg)  |  ![Tulemuste märkimine](README_images/Märkimine.jpg)
+![Treeningud](README_images/Treeningud.jpg)  |  ![Tulemused](README_images/Tulemused.jpg)
   
-Treeningu tulemused             |  Pargid kaardil
+Pargid kaardil             |  Kuulutus ja selle vastused
 :-------------------------:|:-------------------------:
-![Tulemused](README_images/Tulemused.jpg)  |  ![Pargid](README_images/Pargid.jpg)
-  
-Kuulutuste otsimine             |  Kuulutus ja selle vastused
-:-------------------------:|:-------------------------:
-![Otsimine](README_images/Otsimine.jpg)  |  ![Kuulutus](README_images/Vastamine.jpg)
+![Pargid](README_images/Pargid.jpg)  |  ![Kuulutus](README_images/Vastamine.jpg)
 
 ## Litsents
 [MIT litsents](LICENSE)  
